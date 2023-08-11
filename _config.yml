@@ -1,17 +1,15 @@
-title: Hello, world! I'm David Freeman
+title: Junghoon's Random Notes
 description: > # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  Senior Developer at XREAL
 permalink: ':title/'
-# baseurl: "/flexible-jekyll" # the subpath of your site, e.g. /blog
+baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
-site-twitter: #if your site has a twitter account, enter it here
+# site-twitter: #if your site has a twitter account, enter it here
 
 # Author Settings
 author: Junghoon Choi # add your name
 author-img: bruni.jpg # add your photo
-about-author: I am a web developer focusing on front-end development. Always hungry to keep learning. # add description
+about-author: Senior Developer at <a href="https://www.xreal.info/" target="_blank">XREAL</a> # add description
 # social-twitter: # add your Twitter handle
 # social-facebook: # add your Facebook handle
 social-github: be9904 # add your Github handle
