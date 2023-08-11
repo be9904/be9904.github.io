@@ -3,7 +3,7 @@ description: > # this means to ignore newlines until "baseurl:"
   Senior Developer at XREAL
 permalink: ':title/'
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://be9904.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
 # site-twitter: #if your site has a twitter account, enter it here
 
 # Author Settings
@@ -17,7 +17,8 @@ social-linkedin: cjhoon # add your Linkedin handle
 social-email: be9904@gmail.com # add your Email address
 
 # Disqus
-discus-identifier: be9904 # add your discus identifier
+disqus:
+  shortname: "be9904" # disqus short name, https://help.disqus.com/en/articles/1717111-what-s-a-shortname
 
 # Tracker
 analytics: # Google Analytics
