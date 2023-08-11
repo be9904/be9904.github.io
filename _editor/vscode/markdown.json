@@ -22,7 +22,9 @@
 			"img: $4",
 			"fig-caption: $5# Add figcaption (optional)",
 			"tags: [$6]",
-			"---"
+			"---",
+			"",
+			""
 		],
 		"description": "Header for Markdown Files"
 	}
