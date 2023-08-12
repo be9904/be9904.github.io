@@ -3,7 +3,7 @@ layout: post
 title: Getting Started with Unity
 date: 2023-08-12 07:27:59 +09:00
 description: First look at Unity
-img: 2023-08-12-setting-up-unity/unity-logo.jpg
+img: 2023-08-12-setting-up-unity/cover.jpg
 fig-caption: # none
 tags: [Unity]
 ---
