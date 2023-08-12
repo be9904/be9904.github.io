@@ -20,7 +20,7 @@ of Unity directly using Unity installers, it is recommended to download them thr
 After downloading the Unity Hub installer, run the installer. Once the download has finished, run Unity Hub to open it. You will need an account to start with, and you can make one [here](https://id.unity.com/). Your Unity account will store 
 information about active licenses and purchased packages from the [Unity Asset Store](https://assetstore.unity.com/). Sign in with your account and enable a free personal license to start with.
 
-## Installing an Editor
+## Installing the Editor
 Unity provides a ton of different editors with different versions. You will have to check engine patch notes to check if necessary packages are supported in specific editor versions. LTS versions are stable releases. If you are not planning to upgrade or downgrade your project, it is recommended to use LTS. Currently, 2022 LTS is the most recent stable release. Unity Editor versions can be found in the installs tab on the left sidebar of Unity Hub. Click on Install Editor on the top right 
 corner and choose the desired version. If you can't find the version you're looking for, click on Archive and visit download archive to find all versions of the Unity editor.
 
