@@ -11,6 +11,7 @@
 	// 2. Press Ctrl + Shift + P and search 'Snippets: Configure User Snippets'
 	// 3. Search markdown and create a markdown.json file
 	// 4. Copy and Paste the content of this file into markdown.json
+	// 5. Erase all comments. Comments are originally not allowed in json.
 	"New Post Header": {
 		"prefix": "post",
 		"body": [
