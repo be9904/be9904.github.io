@@ -8,7 +8,7 @@ fig-caption: # Add figcaption (optional)
 tags: [Unity, Shader Graph, Computer Graphics]
 ---
 
-This post is based on the Unity tutorial [Simulating Wind in URP (Shader Graph Tutorial)](https://youtu.be/ZsoqrHHtg4I) and uses the Boat Attack project by Unity Technologies. Check out [this post](https://be9904.github.io/cloning-a-project/) to setup the project.
+This post is based on the Unity tutorial [Triplanar Effect in Unity URP (Shader Graph Tutorial)](https://youtu.be/eZqd68YaY2U) and uses the Boat Attack project by Unity Technologies. Check out [this post](https://be9904.github.io/cloning-a-project/) to setup the project.
 
 ## Sampling Albedo
 

@@ -11,8 +11,8 @@ tags: [Unity, GitHub]
 There are countless open source Unity projects on GitHub and many of them are very high quality. Cloning these projects and looking at what other people have done is also a great way to learn. In this post, I will explain how to clone a project 
 from GitHub and open it in your computer. In this example, I will be cloning [Boat Attack](https://github.com/Unity-Technologies/BoatAttack), a URP sample project created by Unity Technologies.
 
-### Step 1. Find your project on GitHub
-First you will need to find your project on GitHub. You can either google it, or search it directly in GitHub. Another useful way is to search by tag. After finding the repository, copy the project link.
+### Step 1. Find a project on GitHub
+First you will need to find a project to clone on GitHub. You can either google it, or search directly in GitHub. Another useful way is to browse by topic. After finding the repository, copy the project URL.
 
 ![Copy Link]({{site.baseurl}}/assets/img/2023-08-12-cloning-a-project/copy-link.PNG)
 
