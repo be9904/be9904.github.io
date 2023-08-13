@@ -47,7 +47,9 @@ Changing the editor version will show a bunch of errors. Follow the steps like b
 
 ![Error 1]({{site.baseurl}}/assets/img/2023-08-12-cloning-a-project/error1.PNG)
 ![Error 2]({{site.baseurl}}/assets/img/2023-08-12-cloning-a-project/error2.PNG)
-![Error 3]({{site.baseurl}}/assets/img/2023-08-12-cloning-a-project/error3.PNG)
+<p align="center">
+    <img src="/assets/img/2023-08-12-cloning-a-project/error3.PNG">
+</p>
 
 The safe mode error may not appear if there are no compile errors after changing the version. In this case, we can see that there are errors with Cinemachine. The error messages show that the Cinemachine namespace is missing, which would mean that either the package is corrupt or missing. To fix this, navigate to the **Package Manager** window and update or reinstall Cinemachine.
 
@@ -55,7 +57,9 @@ The safe mode error may not appear if there are no compile errors after changing
 
 ![Locate Package Manager]({{site.baseurl}}/assets/img/2023-08-12-cloning-a-project/pkg-toolbar.png)
 
-![Update Package]({{site.baseurl}}/assets/img/2023-08-12-cloning-a-project/pkg-window.png)
+<p align="center">
+    <img src="/assets/img/2023-08-12-cloning-a-project/pkg-window.png">
+</p>
 
 ### Step 5. Commit Changes
 After fixing the errors, Unity should recompile and you should see something like this.
