@@ -22,9 +22,9 @@ Triplanar mapping overcomes this limitation by mapping multiple 2D textures proj
  </p>
 <p align="center"><b><i>Comparison of UV Mapping (left) and Triplanar Mapping (right). Brent Owens.</i></b></p>
 
-However, there are drawbacks to this technique. Since triplanar mapping blends 3 different textures, there may be certain points or perspectives where the texture appears blurred. Also, because this technique employs world space coordinates instead of UVs, the tangents will not be correct, thus making normals from normal maps incorrect as well. Despite blending 3 textures, seams can be visible in certain occasions too, all of which results in loss of detail. There are approaches like blending with an opacity map to create more realistic results. There is a link in the reference section for a more detailed description.
+However, there are drawbacks to this technique. Since triplanar mapping blends 3 different textures, there may be certain points or perspectives where the texture appears blurred. Also, because this technique uses world space coordinates instead of UVs, the tangents will not be correct. Normals from normal maps will be incorrect as well. Despite blending 3 textures, seams can be visible in certain occasions too, all of which results in loss of detail. There are approaches like blending with a depth map to create more realistic results. There is a link in the reference section for a more detailed description.
 
-Performance is also an issue. It's not as efficient as traditional texture mapping since it maps the same texture 3 times. So for simple geometry, it may be a better option to sample with UVs. Moreover, if there are more textures to sample like normal maps, specular maps, ambient occlusion maps etc; performance should be taken into account when using this technique in production.
+Performance is also an issue. Triplanar mapping may not be as efficient as traditional texture mapping in most cases since it maps the same texture 3 times. So for simple geometry, it may be a better option to sample with UVs. Moreover, if there are multiple textures to sample like normal maps, specular maps, ambient occlusion maps etc; performance should be carefully measured to use this technique in production.
 
 ## Implementation
 Here's a simple implementation of triplanar mapping in Unity.
@@ -53,7 +53,6 @@ Shader "Custom/Triplanar"
             Tags {"LightMode" = "UniversalForward" }
             
             HLSLPROGRAM
-
             #pragma prefer_hlslcc gles
             #pragma exclude_renderers d3d11_9x
             
@@ -129,7 +128,7 @@ Shader "Custom/Triplanar"
 }
 ```
 
-Here's what it looks like when applying the above shader to a cube. The top 3 cubes are each mapped to a projected plane and the one at the bottom is triplanar mapped.
+Here's what it looks like when applying the above shader to a cube. The top 3 cubes are each mapped to the 3 projection planes and the cube at the bottom is triplanar mapped.
 
 <p align="center">
   <img src="/assets/img/2023-08-13-triplanar-mapping/triplanar-unity.png">
