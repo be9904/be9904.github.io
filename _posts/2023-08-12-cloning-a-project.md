@@ -17,7 +17,7 @@ First you will need to find a project to clone on GitHub. You can either google 
 ![Copy Link]({{site.baseurl}}/assets/img/2023-08-12-cloning-a-project/copy-link.PNG)
 
 ### Step 2. Clone Repository using GitHub Desktop
-Now we will clone the repository to the local computer. This can be done through Git Bash with some commands, but to make things easier, I will do this in [GitHub Desktop](https://desktop.github.com/). Install GitHub Desktop if you don't have it and navigate to **Clone Repository** (File > Clone Repository).
+Now we will clone the repository to the local computer. This can be done through Git Bash with some commands, but to make things easier, I will do this with [GitHub Desktop](https://desktop.github.com/). Install GitHub Desktop if you don't have it and navigate to **Clone Repository** (File > Clone Repository).
 
 ![Clone Repo]({{site.baseurl}}/assets/img/2023-08-12-cloning-a-project/clone.png)
 
