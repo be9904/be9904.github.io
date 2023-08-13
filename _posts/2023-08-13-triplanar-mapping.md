@@ -5,12 +5,9 @@ date: 2023-08-13 16:36:16 +09:00
 description: 
 img: 2023-08-13-triplanar-mapping/cover.jpg
 fig-caption: # Add figcaption (optional)
-tags: [Unity, Shader Graph, Computer Graphics]
+tags: [Unity, Shaders, HLSL, Computer Graphics]
 ---
 
-This post is based on the Unity tutorial **Triplanar Effect in Unity URP (Shader Graph Tutorial)** and uses the Boat Attack project by Unity Technologies. Check out [this post](https://be9904.github.io/cloning-a-project/) to setup the project.
-
-## What is Triplanar Mapping?
 Triplanar is a texture mapping technique used to eliminate distortion and stretching. The usual way to map textures is to pass the UV coordinates stored in a mesh to a shader and sample textures using those coordinates. However, in some cases, these UV coordinates can cause textures to look distorted, like the example below.
 
 <p align="center">
@@ -25,40 +22,134 @@ Triplanar mapping overcomes this limitation by using multiple 2D textures projec
  </p>
 <p align="center"><b><i>Comparison of UV Mapping (left) and Triplanar Mapping (right). Brent Owens.</i></b></p>
 
-However, there are drawbacks to this technique. Since triplanar mapping blends 3 different textures, there may certain points or perspectives where the texture appears blurred. Also, since this technique uses world space coordinates instead of UVs, the tangents will not be correct, making the normal maps incorrect as well. Despite blending 3 textures, seams can be visible in certain occasions too, all of which results in loss of detail.
+However, there are drawbacks to this technique. Since triplanar mapping blends 3 different textures, there may certain points or perspectives where the texture appears blurred. Also, since this technique uses world space coordinates instead of UVs, the tangents will not be correct, making the normal maps incorrect as well. Despite blending 3 textures, seams can be visible in certain occasions too, all of which results in loss of detail. There are approaches like blending with an opacity map to create more realistic results. There is a link in the reference section for a more detailed description.
 
-Performance is also an issue. It's not as efficient as traditional texture mapping since it maps the same texture 3 times. If there are more textures to sample like normal maps, specular maps, ambient occlusion maps etc; performance should be taken into account when using this technique in production.
+Performance is also an issue. It's not as efficient as traditional texture mapping since it maps the same texture 3 times. So for simple geometry, it may be a better option to sample with UVs. Besides, if there are more textures to sample like normal maps, specular maps, ambient occlusion maps etc; performance should be taken into account when using this technique in production.
 
-## Triplanar Effect in Unity
-Now let's take a look at how we can use the theories of triplanar mapping in Unity to create a shader that can dynamically adjust grass distribution on a cliff. There are two sets of textures for the cliff, a rock texture and a grass texture. If we sample the grass texture on the xz plane and lerp it with the rock texture, we can render grass on points of the cliff that faces up.
+## Implementation
+Here's a simple implementation of triplanar mapping in Unity.
 
-### Sampling Albedo
-First, we will have to sample the albedo map of the rock and grass. To do that, create a **Sample Texture 2D** node and connect the albedo texture node. Do the same for the grass node and leave them for now. You can connect a **Preview** node to the output of the Sample Texture 2D node to check if it is sampled correctly.
+```hlsl
+Shader "Custom/Triplanar"
+{
+    Properties
+    {
+        _MainTex ("Texture", 2D) = "white" {}
+        
+        [KeywordEnum(XY, XZ, YZ, Triplanar)] _MappingPlane ("Mapping Plane", Float) = 1
+        _BlendSharpness("Blend Sharpness", Range(0, 5)) = 1.0
+    }
+    SubShader
+    {
+        Tags {
+            "RenderPipeline"="UniversalPipeline"
+            "RenderType"="Opaque"
+            "Queue"="Geometry"
+        }
+
+        Pass
+        {
+            Name "Universal Forward"
+            Tags {"LightMode" = "UniversalForward" }
+            
+            HLSLPROGRAM
+
+            #pragma prefer_hlslcc gles
+            #pragma exclude_renderers d3d11_9x
+            
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #pragma shader_feature _MAPPINGPLANE_XY _MAPPINGPLANE_XZ _MAPPINGPLANE_YZ _MAPPINGPLANE_TRIPLANAR
+            
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+            
+            struct VertexInput
+            {
+                float4 vertex: POSITION;
+                float3 normal: NORMAL;
+                float2 uv : TEXCOORD0;
+            };
+
+            struct VertexOutput
+            {
+                float4 vertex : SV_POSITION;
+                float2 uv : TEXCOORD0;
+                float3 worldPos : TEXCOORD2;
+                float3 worldNormal: TEXCOORD3;
+            };
+
+            Texture2D _MainTex;
+            SamplerState sampler_MainTex;
+            float _BlendSharpness;
+
+            VertexOutput vert(VertexInput v)
+            {
+                VertexOutput o;
+                o.vertex = TransformObjectToHClip(v.vertex.xyz);
+                o.uv = v.uv;
+                o.worldPos = TransformObjectToWorld(v.vertex.xyz);
+                o.worldNormal = TransformObjectToWorldNormal(v.normal);
+                return o;
+            }
+
+            half4 frag(VertexOutput i): SV_Target
+            {
+                // color to return
+                half4 color = half4(0,0,0,1);
+
+                #if defined(_MAPPINGPLANE_XY)
+                color = _MainTex.Sample(sampler_MainTex, i.worldPos.xy);
+
+                #elif defined(_MAPPINGPLANE_XZ)
+                color = _MainTex.Sample(sampler_MainTex, i.worldPos.xz);
+                
+                #elif defined(_MAPPINGPLANE_YZ)
+                color = _MainTex.Sample(sampler_MainTex, i.worldPos.yz);
+
+                #elif defined(_MAPPINGPLANE_TRIPLANAR)
+                // sample for each projection plane
+                half3 xAlbedo = _MainTex.Sample(sampler_MainTex, i.worldPos.yz);
+                half3 yAlbedo = _MainTex.Sample(sampler_MainTex, i.worldPos.xz);
+                half3 zAlbedo = _MainTex.Sample(sampler_MainTex, i.worldPos.xy);
+
+                // calculate weights and normalize
+                half3 weight = pow(abs(i.worldNormal), _BlendSharpness);
+                weight /= weight.x + weight.y + weight.z;
+
+                // blend colors
+                color.rgb = xAlbedo * weight.x + yAlbedo * weight.y + zAlbedo * weight.z;
+                #endif
+                
+                return color;
+            }
+            ENDHLSL
+        }
+    }
+}
+```
+
+Here's what it looks like when applying the above shader to a cube. The top 3 cubes are each mapped to a projected plane and the one at the bottom is triplanar mapped.
 
 <p align="center">
-  <img src="/assets/img/2023-08-13-triplanar-mapping/triplanar-albedo.PNG" width="492" height="527">
+  <img src="/assets/img/2023-08-13-triplanar-mapping/triplanar-unity.png">
  </p>
-<p align="center"><b><i>Sampling Albedo Maps in Shader Graph</i></b></p>
+<p align="center"><b><i>Mapping on XY, XZ, YZ Plane and Triplanar Mapping.</i></b></p>
 
-### Sampling Normals
-Next, we need to sample normals to give light variations. Grass normals can be sampled using the Sample Texture 2D node with the `Type` parameter set to `Normal`. However in this example, the rock normals are packed with the AO map like below. The AO map is stored in the R channel and the other channels store normals. Packing multiple textures to different channels of an image is efficient because it saves texture memory, but there are extra computations needed in the shader.
+As mentioned above, blend artifacts may be visible from certain angles even if `_BlendSharpness` is set to a high value. Below is an example of when blending is visible on the mesh.
 
 <p align="center">
-  <img src="/assets/img/2023-08-13-triplanar-mapping/normal-ao.PNG" width="442" height="442">
+  <img src="/assets/img/2023-08-13-triplanar-mapping/blend.png">
  </p>
-<p align="center"><b><i>Normal + AO</i></b></p>
+<p align="center"><b><i>Blend Artifacts</i></b></p>
 
-To sample normals, extract the A, G, B channels to a Vector3 node and remap it from 0 ~ 1 to -1 ~ 1. You can remap it by either multiplying the Vector3 by 2 and subtracting by 1, or simply using the **Remap** node. Now, connect the R channel directly to **Ambient Occlusion** of the Fragment node and the remapped normal vector to **Normal** of the Fragment node.
-
-<p align="center">
-  <img src="/assets/img/2023-08-13-triplanar-mapping/triplanar-normal.PNG" width="447" height="440">
- </p>
-<p align="center"><b><i>Sampling Rock and Grass Normals</i></b></p>
-
-### Implementing Grass Height
-Now that we finished sampling textures, we'll have to 
-
-### Triplanar Effect
+By adding a bit more code to this shader, such as depth based blending, sampling textures on more than 3 projective planes, or changing the blending method, the triplanar shader can be extended for use in various applications. Check out the resources listed below in the References tab for more detailed explanations and implementations.
 
 ## References
-[Triplanar Effect in Unity URP (Shader Graph Tutorial)](https://youtu.be/eZqd68YaY2U)
+[Triplanar Mapped Terrain (Cover Image) by James O'Hare](http://www.farfarer.com/blog/2011/12/07/unity-terrain-triplanar-texturing/)
+
+[Advanced Terrain Texture Splatting by Andrey Mishkinis](https://www.gamedeveloper.com/programming/advanced-terrain-texture-splatting)
+
+[Use Tri-Planar Texture Mapping for Better Terrain by Brent Owens](https://gamedevelopment.tutsplus.com/use-tri-planar-texture-mapping-for-better-terrain--gamedev-13821a)
+
+[Normal Mapping for a Triplanar Shader by Ben Golus](https://bgolus.medium.com/normal-mapping-for-a-triplanar-shader-10bf39dca05a)
