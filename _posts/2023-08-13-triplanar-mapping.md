@@ -8,23 +8,23 @@ fig-caption: # Add figcaption (optional)
 tags: [Unity, Shaders, HLSL, Computer Graphics]
 ---
 
-Triplanar is a texture mapping technique used to eliminate distortion and stretching. The usual way to map textures is to pass the UV coordinates stored in a mesh to a shader and sample textures using those coordinates. However, in some cases, these UV coordinates can cause textures to look distorted, like the example below.
+Triplanar mapping is a texture mapping technique used to eliminate distortion and stretching. The usual way to map textures is to pass the mesh's UV coordinates to a shader and sample textures using those coordinates. However, in some cases, these UV coordinates can cause textures to look distorted, as shown in the example below.
 
 <p align="center">
   <img src="/assets/img/2023-08-13-triplanar-mapping/distorted-texture.jpeg" width="640" height="360">
  </p>
 <p align="center"><b><i>Distorted Terrain Textures. WizardPie42 from Reddit.</i></b></p>
 
-Triplanar mapping overcomes this limitation by using multiple 2D textures projected onto the surface along the X, Y and Z axes. The surface is divided into 3 different regions and each are textured using its corresponding 2D projection. For each point, the influence of the 3 mapped textures are calculated with blend weights. For example, if the surface normal is almost parallel to the Y axis, the sample from the Y-projected plane will blend in the most. This technique shows great results when rendering terrains, because distortion caused by complex surface geometry is mitigated and textures from different regions can be seamlessly blended.
+Triplanar mapping overcomes this limitation by mapping multiple 2D textures projected onto the surface along the X, Y and Z axes. The surface is divided into 3 different regions and each is textured using its corresponding 2D projection. For each point, the influence of the 3 mapped textures are calculated with blend weights. For example, if the surface normal is almost parallel to the Y axis, the sample from the Y-projected plane will have the greatest influence. This technique shows great results when rendering terrains, because distortion caused by complex surface geometry is mitigated and textures from different regions can be seamlessly blended.
 
 <p align="center">
   <img src="/assets/img/2023-08-13-triplanar-mapping/tri-compare.jpg">
  </p>
 <p align="center"><b><i>Comparison of UV Mapping (left) and Triplanar Mapping (right). Brent Owens.</i></b></p>
 
-However, there are drawbacks to this technique. Since triplanar mapping blends 3 different textures, there may certain points or perspectives where the texture appears blurred. Also, since this technique uses world space coordinates instead of UVs, the tangents will not be correct, making the normal maps incorrect as well. Despite blending 3 textures, seams can be visible in certain occasions too, all of which results in loss of detail. There are approaches like blending with an opacity map to create more realistic results. There is a link in the reference section for a more detailed description.
+However, there are drawbacks to this technique. Since triplanar mapping blends 3 different textures, there may be certain points or perspectives where the texture appears blurred. Also, because this technique employs world space coordinates instead of UVs, the tangents will not be correct, thus making normals from normal maps incorrect as well. Despite blending 3 textures, seams can be visible in certain occasions too, all of which results in loss of detail. There are approaches like blending with an opacity map to create more realistic results. There is a link in the reference section for a more detailed description.
 
-Performance is also an issue. It's not as efficient as traditional texture mapping since it maps the same texture 3 times. So for simple geometry, it may be a better option to sample with UVs. Besides, if there are more textures to sample like normal maps, specular maps, ambient occlusion maps etc; performance should be taken into account when using this technique in production.
+Performance is also an issue. It's not as efficient as traditional texture mapping since it maps the same texture 3 times. So for simple geometry, it may be a better option to sample with UVs. Moreover, if there are more textures to sample like normal maps, specular maps, ambient occlusion maps etc; performance should be taken into account when using this technique in production.
 
 ## Implementation
 Here's a simple implementation of triplanar mapping in Unity.
@@ -143,7 +143,7 @@ As mentioned above, blend artifacts may be visible from certain angles even if `
  </p>
 <p align="center"><b><i>Blend Artifacts</i></b></p>
 
-By adding a bit more code to this shader, such as depth based blending, sampling textures on more than 3 projective planes, or changing the blending method, the triplanar shader can be extended for use in various applications. Check out the resources listed below in the References tab for more detailed explanations and implementations.
+Adding additional code to this shader, such as depth based blending, sampling textures on more than 3 projective planes, or altering the blending method, can extend the triplanar shader across various use cases. Refer to the resources listed in the References section below for more comprehensive explanations and implementations.
 
 ## References
 [Triplanar Mapped Terrain (Cover Image) by James O'Hare](http://www.farfarer.com/blog/2011/12/07/unity-terrain-triplanar-texturing/)
