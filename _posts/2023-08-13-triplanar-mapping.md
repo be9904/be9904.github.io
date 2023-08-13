@@ -131,14 +131,14 @@ Shader "Custom/Triplanar"
 Here's what it looks like when applying the above shader to a cube. The top 3 cubes are each mapped to the 3 projection planes and the cube at the bottom is triplanar mapped.
 
 <p align="center">
-  <img src="/assets/img/2023-08-13-triplanar-mapping/triplanar-unity.png">
+  <img src="/assets/img/2023-08-13-triplanar-mapping/triplanar-unity.png" width="620" height="357">
  </p>
 <p align="center"><b><i>Mapping on XY, XZ, YZ Plane and Triplanar Mapping.</i></b></p>
 
 As mentioned above, blend artifacts may be visible from certain angles even if `_BlendSharpness` is set to a high value. Below is an example of when blending is visible on the mesh.
 
 <p align="center">
-  <img src="/assets/img/2023-08-13-triplanar-mapping/blend.png">
+  <img src="/assets/img/2023-08-13-triplanar-mapping/blend.png" width="618" height="346">
  </p>
 <p align="center"><b><i>Blur Artifact</i></b></p>
 
