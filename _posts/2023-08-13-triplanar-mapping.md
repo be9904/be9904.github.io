@@ -141,7 +141,7 @@ As mentioned above, blend artifacts may be visible from certain angles even if `
 <p align="center">
   <img src="/assets/img/2023-08-13-triplanar-mapping/blend.png">
  </p>
-<p align="center"><b><i>Blend Artifacts</i></b></p>
+<p align="center"><b><i>Blur Artifact</i></b></p>
 
 Adding additional code to this shader, such as depth based blending, sampling textures on more than 3 projective planes, or altering the blending method, can extend the triplanar shader across various use cases. Refer to the resources listed in the References section below for more comprehensive explanations and implementations.
 
