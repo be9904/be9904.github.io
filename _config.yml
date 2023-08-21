@@ -1,7 +1,7 @@
-title: Junghoon's Random Notes
+title: Junghoon's Notes
 description: > # this means to ignore newlines until "baseurl:"
   Senior Developer at XREAL
-permalink: ':title/'
+permalink: ":title/"
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://be9904.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 # site-twitter: #if your site has a twitter account, enter it here
