@@ -5,7 +5,7 @@ date: 2023-08-22 20:21:15 +09:00
 description: korean
 img: 2023-08-19-xreal-review/cover.png
 fig-caption: # Add figcaption (optional)
-tags: [Metaverse, XR, VR, Unity]
+tags: [Metaverse, XR, VR, Unity, Korean Post]
 bmac: hide
 ---
 
