@@ -23,15 +23,15 @@ The goal of this project was to understand DCC tools and get a grasp of artist w
 
 This short film is about a coin that wishes to become special and unique. He believes that by entering a vending machine, he can transform into something special, like a fancy toy, Lego character, or a teddy bear. So, he finds his way into the vending machine and discovers the parts of what he wants to become scattered on a huge island.
 
-The coin retrieves parts of the shoe and expects to finally transform from his worthless, unattractive self but realizes that he was only used by the vending machine to create the final product. Full of despair, the coin searches for another way out but discovers countless other coins that have failed to escape being carried away in a deadly coin river.
+The coin retrieves parts of the shoe and expects to finally transform from his worthless, unattractive self but realizes that he was only used by the vending machine to create the final product. Full of despair, the coin searches for another way out but discovers countless other coins being carried away in a deadly coin river, all of which have failed to escape.
 
-The film ends by showing the coin jumping off the exit, making his way out of the vending machine.
+The film ends by showing the coin jumping off the exit, trying to make his way out of the vending machine.
 
 ### Character
 
 **1. Modeling**
 
-This is the final model of the coin character. The hands were made by creating a hand skeleton with a skin modifier and cleaning up the topology using the remesh modifier. Arms, legs and shoes were sculpted from scratch. The face was replaced with an array of facial expression textures. I used <a href="https://southernshotty.gumroad.com/l/fmarts/7xxsskp" target="_blank">SouthernShotty's Face Animation Files</a>. These textures are amazing and royalty free, I recommend checking out his other assets, too.
+This is the final model of the coin character. The hands were made by creating a hand skeleton with a skin modifier. I cleaned up the topology using the remesh modifier. Arms, legs and shoes were sculpted from scratch. The face was replaced with an array of facial expression textures. I used <a href="https://southernshotty.gumroad.com/l/fmarts/7xxsskp" target="_blank">SouthernShotty's Face Animation Files</a>. These textures are amazing and royalty free, I recommend checking out his other assets, too.
 
 <p align="center">
   <img src="/assets/img/2023-08-25-liminal-space/model.png" width="60%" height="60%">
@@ -40,7 +40,7 @@ This is the final model of the coin character. The hands were made by creating a
 
 **2. Rigging**
 
-I initially rigged the character using Mixamo's auto rigger. However, since Mixamo's auto rigger is designed for humanoid characters, applying animations caused the coin's body to distort. To fix this issue, I imported the character in a T-pose into Blender, where I removed unnecessary bones and made minor adjustments to bone weights.
+I initially attempted to rig the character using Mixamo's auto rigger. However, since Mixamo's auto rigger is for humanoid characters, applying animations caused the coin's body to distort. To fix this issue, I imported the character in a T-pose into Blender, removed unnecessary bones and made minor adjustments to bone weights.
 
 <p align="center">
   <img src="/assets/img/2023-08-25-liminal-space/rig.png" width="60%" height="60%">
@@ -49,7 +49,7 @@ I initially rigged the character using Mixamo's auto rigger. However, since Mixa
 
 **3. Animating**
 
-Because there were no skeletons identical or even similar to this coin character, I manually adjusted each animation frame by frame. At the time, I had limited knowledge of character rigging, so this task was quite tedious. However, I later realized that this process can be simplified by retargeting a humanoid skeleton to this custom one and exporting animations from the retargeted skeleton. Here's what the animations look like.
+Because there were no skeletons identical or even similar to this coin character, I manually adjusted each animation frame by frame. At the time, I had limited knowledge of character animation, so this task was quite tedious. However, I later realized that this process can be simplified by retargeting a humanoid skeleton to this custom one and exporting animations from the retargeted skeleton. Here's what the animations look like.
 
 <p align="center">
   <img src="/assets/img/2023-08-25-liminal-space/walk.png" width="60%" height="60%">
@@ -63,7 +63,7 @@ Because there were no skeletons identical or even similar to this coin character
 
 ### Toon Shading
 
-In the planning phase, our team decided that a toon style would better suit our fictional universe than making everything look photorealistic. We achieved this effect by using Unity's toon shader package, which was applied to the coin character and every item in the vending machine. As a result, it helped emphasize crucial elements of our universe with the outline effect.
+In the planning phase, our team decided that a toon style would better suit our fictional universe than making everything look photorealistic. We achieved this effect by using Unity's toon shader package, which was applied to the coin character and every item in the vending machine. As a result, the toon style along with the outline effect helped emphasize crucial elements of our universe.
 
 <p align="center">
   <img src="/assets/img/2023-08-25-liminal-space/toon.png" width="70%" height="70%">
@@ -88,7 +88,7 @@ As a result, toon style shading effectively showed the core elements and atmosph
 
 ### Cinemachine
 
-I used Unity's Cinemachine to create cutscenes of the final film. The package was straightforward and easy to use. Camera panning could be done using virtual cameras with dolly tracks and many other components and parameters were provided for camera movement.
+I used Unity's Cinemachine to create cutscenes of the final film. The package was straightforward and easy to use. There were a variety of components and parameters provided for camera movement. I used virtual cameras with dolly tracks to simulate camera movement like panning, dolly zoom, arc shots etc.
 
 <p align="center">
   <img src="/assets/img/2023-08-25-liminal-space/timeline.png" width="70%" height="70%">
