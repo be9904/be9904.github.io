@@ -1002,7 +1002,7 @@ table tfoot td {
   margin: 0 0 10px;
   position: relative;
   padding-bottom: 15px;
-  font-size: 16px;
+  font-size: 18px;
   text-transform: uppercase;
   color: #333030;
   font-weight: 700;
@@ -1027,6 +1027,22 @@ table tfoot td {
 .about p {
   font-size: 16px;
   margin: 0 0 10px;
+}
+
+.about .clickable-text {
+  font-size: 18px;
+  margin: 0 0 10px;
+  cursor: pointer;
+  text-decoration: none;
+  color:#777;
+}
+
+.clickable-text:hover {
+  color:darkcyan;
+}
+
+.clickable-text:focus {
+  outline: none;
 }
 
 .content-box {
@@ -1524,4 +1540,111 @@ a.newer-posts:hover {
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+/****************************************/
+/* Timeline Styling from Alexander Ameye*/
+/****************************************/
+
+.home-header {
+  display: flex;
+  align-items: start;
+  padding-bottom: 0;
+  grid-row-gap: 15px;
+  flex-direction: column;
+}
+
+.home-header blockquote {
+  margin: 0;
+  box-sizing: border-box;
+  font-style: normal;
+  color: #494949;
+  background-color:#eaffe6;
+  border-color: #000;
+  border-radius: 4px;
+  border-width: 2px;
+  border-style: solid;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  margin-left: 15px;
+  margin-right: 15px;
+  padding: 8px 16px;
+}
+
+.column-page-content blockquote p {
+  margin: 0;
+  text-align: left;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+.timeline {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.timeline-list {
+  position: relative;
+  padding-left: 45px;
+  list-style: none;
+}
+
+ul {
+  padding-inline-start: 20px;
+  padding-bottom: 10px;
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+}
+
+li {
+  margin: 0;
+  padding: 0;
+  /* font-family: monospace, monospace; */
+  text-align: justify;
+  font-style: normal;
+  font-size: 16px;
+  letter-spacing: .02em;
+  line-height: 1.6em;
+  display: list-item;
+}
+
+.timeline-event {
+  position: relative;
+}
+
+.timeline-event .year {
+  font-size: medium;
+  padding: 0;
+  margin: 0;
+  font-weight: 700;
+  color: #484848;
+}
+
+.timeline-event:before {
+  display: inline-block;
+  content: '';
+  position: absolute;
+  left: -37px;
+  height: 100%;
+  width: 10px;
+}
+
+.timeline-event.is-not-done {
+  padding-bottom: 0px;
+}
+
+.timeline-event.is-not-done::before {
+  border-left: 3px dashed #000;
+}
+
+.timeline-event.is-done {
+  padding-bottom: 0px;
+}
+
+.timeline-event.is-done::before {
+  border-left: 3px solid #000;
 }

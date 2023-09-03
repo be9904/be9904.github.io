@@ -9,7 +9,12 @@ layout: default
         <a href="{{site.baseurl}}/"><img src="{{site.baseurl}}/assets/img/{% if site.author-img %}{{site.author-img}}{% endif %}" alt="{{site.author}}"></a>
       </div>
       <div class="author-name">{{site.author}}</div>
-      <p>{{site.about-author | markdownify}}</p>
+      <div style="margin: 0 0 5px;">
+        <a href="/about" class="clickable-text">About</a>
+      </div>
+      <div style="margin: 0 0 5px;">
+        <a href="/tags" class="clickable-text">Tags</a>
+      </div>
     </div>
   </header> <!-- End Header -->
   <footer>
