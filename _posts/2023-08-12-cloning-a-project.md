@@ -6,6 +6,7 @@ description: How to download and open an open source project from GitHub
 img: 2023-08-12-cloning-a-project/cover.jpg
 fig-caption: # Add figcaption (optional)
 tags: [Unity, GitHub]
+bmac: hide
 ---
 
 There are countless open source Unity projects on GitHub and many of them are very high quality. Cloning these projects and looking at what other people have done is also a great way to learn. In this post, I will explain how to clone a project 

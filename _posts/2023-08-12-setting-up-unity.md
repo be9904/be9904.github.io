@@ -6,6 +6,7 @@ description: First look at Unity
 img: 2023-08-12-setting-up-unity/cover.jpg
 fig-caption: # none
 tags: [Unity]
+bmac: hide
 ---
   
 Back in 2005 when Unity was first released, it was mostly used for 2D, mobile games. Today, it is used in a variety of different platforms, including 3D games, film production and XR. This post will go through the process of 

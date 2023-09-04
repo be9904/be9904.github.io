@@ -6,7 +6,7 @@ description:
 img: 2023-08-25-liminal-space/cover.png
 fig-caption: # Add figcaption (optional)
 tags: [Project, Unity, Blender, Shaders, Animation]
-bmac: show
+bmac: hide
 ---
 
 _'Liminal Space - The Strange Vending Machine'_ is a team project I worked on at XREAL. The main tools used for this project were Unity and Blender.
