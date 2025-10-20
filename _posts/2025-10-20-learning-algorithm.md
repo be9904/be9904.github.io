@@ -10,11 +10,14 @@ visibility: private
 bmac: hide
 ---
 # Contents
-1. [Learning](#learning)
-2. [Activation Function](#activation-function)
-3. [Example of Error Back Propagation](#example-of-error-back-propagation)
-4. [Generalization & Overfitting](<#generalization--overfitting>)
-5. [References](#references)
+1. [Introduction](#introduction)
+2. [Learning](#learning)
+3. [Activation Function](#activation-function)
+4. [Example of Error Back Propagation](#example-of-error-back-propagation)
+5. [Generalization & Overfitting](<#generalization--overfitting>)
+6. [References](#references)
+
+# Introduction
 
 # Learning
 
