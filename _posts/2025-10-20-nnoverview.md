@@ -6,7 +6,7 @@ description: Overview of deep neural networks covered in Introduction to Deep Ne
 img: Deep-Learning-neural-network.png
 fig-caption: # Add figcaption (optional)
 # tags: [Artificial Intelligence, Deep Neural Networks]
-visibility: public
+visibility: private
 bmac: hide
 ---
 # Contents
