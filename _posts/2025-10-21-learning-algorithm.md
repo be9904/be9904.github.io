@@ -78,8 +78,8 @@ Recall the cell body of a perceptron contains a linear weighted sum and an **act
 <p align="center"><b><i>Sigmoid Activation Function</i></b></p>
 
 One notable property of the sigmoid function is that its derivative can be expressed in terms of the function itself.
-\\[ y = \frac{1}{1 + e^{-x}} \\]
-\\[ \frac{dy}{dx} = y(1-y) \\]
+\\[ \sigma(x) = \frac{1}{1 + e^{-x}} \\]
+\\[ \frac{d}{dx}\sigma(x) = \sigma(x)(1-\sigma(x)) \\]
 This makes gradient computations convenient in neural networks.
 
 # Example of Error Back Propagation
