@@ -2,7 +2,7 @@
 layout: post
 title: Optimizing Gradient Descent
 date: Mon Oct 18 02:35:27 KST 2025
-description: Overview of gradient descent optimization techniques covered in Introduction to Deep Neural Networks (SWE3052)
+description: Gradient descent optimization techniques covered in Introduction to Deep Neural Networks (SWE3052)
 img: Deep-Learning-neural-network.png
 fig-caption: # Add figcaption (optional)
 tags: [Artificial Intelligence, Neural Networks, Deep Neural Networks, Gradient Descent, Optimization]
