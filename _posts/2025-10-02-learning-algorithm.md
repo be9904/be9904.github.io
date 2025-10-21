@@ -94,16 +94,60 @@ Assume we create a neural network for a XOR logic classifier. Unlike previous si
 We'll then randomly initialize weights like below.
 
 | x_1 | x_2 | t | y |
-| -------- | -------- | -------- | -------- |
-| 1 | 1 | 0 | 0.52 |
-| 1 | 0 | 1 | 0.50 |
-| 0 | 1 | 1 | 0.52 |
-| 0 | 0 | 0 | 0.55 |
+| --- | --- | - | - |
+| 1 | 1 | 0 |  0.52 |
+| 1 | 0 | 1 |  0.50 |
+| 0 | 1 | 1 |  0.52 |
+| 0 | 0 | 0 |  0.55 |
+
+<p align="center"><b><i>Iteration: 0</i></b></p>
+
+As we keep updating weights, we can see the expected results getting somewhat close to the target output.
+
+| x_1 | x_2 | t | y |
+| --- | --- | - | - |
+| 1 | 1 | 0 |  0.30 |
+| 1 | 0 | 1 |  0.81 |
+| 0 | 1 | 1 |  0.81 |
+| 0 | 0 | 0 |  0.11 |
+
+<p align="center"><b><i>Iteration: 3000</i></b></p>
+
+| x_1 | x_2 | t | y |
+| --- | --- | - | - |
+| 1 | 1 | 0 |  0.02 |
+| 1 | 0 | 1 |  0.98 |
+| 0 | 1 | 1 |  0.98 |
+| 0 | 0 | 0 |  0.02 |
+
+<p align="center"><b><i>Iteration: 10000</i></b></p>
+
+If we plot the error into a graph, it would look something like this.
+<p align="center">
+  <img src="/assets/img/2025-10-02-learning-algorithm/loss.webp" width="60%" height="60%">
+ </p>
+<p align="center"><b><i>Loss over time</i></b></p>
+
+It would be a bad idea to set the stopping condition to when the loss is exactly 0 because
+
+1. It would require almost an infinite number of epochs for loss to reach exactly 0.
+2. Finding weights that have 0 loss for a single sample means it is likely to not perform well with other samples.
+
+Therefore it is crucial to stop training at an appropriate point where the results are appropriate for a general dataset.
 
 # Generalization & Overfitting
+
+This brings us to generalization and overfitting. Depending on how we set the hyperparameters, the neural network may work well with samples that weren't used for training and may work well only for trained samples. The former is a neural network with good generalization while the latter is an overfitted neural network. A well trained neural network not only generalizes the dataset well, but also predicts unlearned values well. Our objective is to train a generalized neural network.
+
+<p align="center">
+  <img src="/assets/img/2025-10-02-learning-algorithm/underfitting_overfitting.png" width="100%" height="100%">
+ </p>
+<p align="center"><b><i>Underfitting, Generalization and Overfitting</i></b></p>
 
 # References
 
 [Mathematics behind the Neural Network](https://studymachinelearning.com/mathematics-behind-the-neural-network/)
 
 [Sigmoid Function](https://www.geeksforgeeks.org/machine-learning/derivative-of-the-sigmoid-function/)
+
+[Underfitting vs. Overfitting](https://scikit-learn.org/stable/auto_examples/model_selection/plot_underfitting_overfitting.html)
