@@ -91,6 +91,15 @@ Assume we create a neural network for a XOR logic classifier. Unlike previous si
  </p>
 <p align="center"><b><i>Sigmoid Activation Function</i></b></p>
 
+We'll then randomly initialize weights like below.
+
+| x_1 | x_2 | t | y |
+| -------- | -------- | -------- | -------- |
+| 1 | 1 | 0 | 0.52 |
+| 1 | 0 | 1 | 0.50 |
+| 0 | 1 | 1 | 0.52 |
+| 0 | 0 | 0 | 0.55 |
+
 # Generalization & Overfitting
 
 # References
