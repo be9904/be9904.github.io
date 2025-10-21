@@ -160,3 +160,5 @@ Finally, below is a famous image of how each optimization method behaves when st
 [Optimization with Momentum](https://gbhat.com/machine_learning/optimize_with_momentum.html)
 
 [Gradient Descent Nesterov Momentum](https://gbhat.com/machine_learning/gradient_descent_nesterov.html)
+
+[Intro to optimization in deep learning: Momentum, RMSProp and Adam](https://www.digitalocean.com/community/tutorials/intro-to-optimization-momentum-rmsprop-adam)
