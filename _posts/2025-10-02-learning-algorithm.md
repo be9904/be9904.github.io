@@ -5,8 +5,8 @@ date: Tue Oct 2 01:18:58 KST 2025
 description: Error back propagation, gradient descent, activation functions and more...
 img: Deep-Learning-neural-network.png
 fig-caption: # Add figcaption (optional)
-# tags: [Artificial Intelligence, Deep Neural Networks, Error Back Propagation, Gradient Descent, Overfitting]
-visibility: private
+tags: [Artificial Intelligence, Deep Neural Networks, Error Back Propagation, Gradient Descent, Overfitting]
+visibility: public
 bmac: hide
 ---
 # Contents
