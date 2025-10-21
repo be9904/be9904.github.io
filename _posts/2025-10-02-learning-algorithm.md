@@ -137,12 +137,20 @@ Therefore it is crucial to stop training at an appropriate point where the resul
 
 # Generalization & Overfitting
 
-This brings us to generalization and overfitting. Depending on how we set the hyperparameters, the neural network may work well with samples that weren't used for training and may work well only for trained samples. The former is a neural network with good generalization while the latter is an overfitted neural network. A well trained neural network not only generalizes the dataset well, but also predicts unlearned values well. Our objective is to train a generalized neural network.
+This brings us to generalization and overfitting. Depending on how we set the hyperparameters, the neural network may perform well on unseen samples or only on those used for training. The former is a neural network with good generalization while the latter is an overfitted neural network. A well-trained neural network not only generalizes the dataset, but also predicts unlearned values well. Our objective is to train a generalized neural network.
 
 <p align="center">
   <img src="/assets/img/2025-10-02-learning-algorithm/underfitting_overfitting.png" width="100%" height="100%">
  </p>
 <p align="center"><b><i>Underfitting, Generalization and Overfitting</i></b></p>
+
+The graph on the left is an example of **underfitting**. The neural network's modeling power is too weak compared to the complexity of the problem, so a rather simple decision boundary is generated, not being able to predict unlearned samples. The graph on the right is an example of **overfitting**. It has strong modeling power and is trained extremely well with the given training samples. However, this still doesn't predict unlearned values well. The graph in the middle is what is generally considered a neural network with the right fit. It generalizes the dataset well and provides highly accurate prediction for new data.
+
+Underfitting usually happens when there aren't enough layers or perceptrons in the network. This can be fixed by increasing the complexity of the model (number of layers or neurons).
+
+Overfitting happens because it learns the exact training dataset. One might think taking into account all the samples exactly may positively affect the network, but we have to keep in mind that the neural network doesn't evaluate just the given set; it is trained to predict unknown, new values. By learning the dataset perfectly, it would also mean the neural network has learned the noise that may be present within the data, thus leading to inaccurate prediction of unlearned samples.
+
+To sum up, it is important to find the optimal **number of neurons** and **training iterations**. We can also use other techniques like regularization, or get more training data for better generalization.
 
 # References
 
