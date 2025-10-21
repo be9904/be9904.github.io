@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Learning Algorithm
-date: Tue Oct 21 01:18:58 KST 2025
+date: Tue Oct 2 01:18:58 KST 2025
 description: Error back propagation, gradient descent, activation functions and more...
 img: Deep-Learning-neural-network.png
 fig-caption: # Add figcaption (optional)
@@ -22,7 +22,7 @@ bmac: hide
 
 Previously, we discussed how to design a simple neural network. We define a perceptron that computes the weighted sum of inputs and applies a threshold, then sends the resulting value to the next layer. But, we have no idea how to set weights for each connection. This section talks about finding the appropriate weight values with error back propagation.
 <p align="center">
-  <img src="/assets/img/2025-10-21-learning-algorithm/NN.jpg" width="60%" height="60%">
+  <img src="/assets/img/2025-10-02-learning-algorithm/NN.jpg" width="60%" height="60%">
  </p>
 
 # Learning with Gradient Descent
@@ -73,7 +73,7 @@ To calculate gradients, we need to differentiate the loss function with respect 
 Recall the cell body of a perceptron contains a linear weighted sum and an **activation function**. Since we are back propagating, we need to be able to get a gradient value from every part of the network. Using a hard limit like before would be pointless because it is not differentiable and all gradient values are 0 except for at the threshold. So we replace this with another activation called the **sigmoid** activation function.
 
 <p align="center">
-  <img src="/assets/img/2025-10-21-learning-algorithm/sigmoid.png" width="80%" height="80%">
+  <img src="/assets/img/2025-10-02-learning-algorithm/sigmoid.png" width="80%" height="80%">
  </p>
 <p align="center"><b><i>Sigmoid Activation Function</i></b></p>
 
@@ -83,6 +83,13 @@ One notable property of the sigmoid function is that its derivative can be expre
 This makes gradient computations convenient in neural networks.
 
 # Example of Error Back Propagation
+
+Assume we create a neural network for a XOR logic classifier. Unlike previous simple problems, XOR logic is a non-linearly separable problem, so the network would look something like this.
+
+<p align="center">
+  <img src="/assets/img/2025-10-02-learning-algorithm/xor.png" width="50%" height="50%">
+ </p>
+<p align="center"><b><i>Sigmoid Activation Function</i></b></p>
 
 # Generalization & Overfitting
 

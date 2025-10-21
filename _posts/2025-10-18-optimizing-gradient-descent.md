@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Optimizing Gradient Descent
-date: Mon Oct 20 02:35:27 KST 2025
+date: Mon Oct 18 02:35:27 KST 2025
 description: Overview of gradient descent optimization techniques covered in Introduction to Deep Neural Networks (SWE3052)
 img: Deep-Learning-neural-network.png
 fig-caption: # Add figcaption (optional)
@@ -76,7 +76,7 @@ The core idea of naive gradient descent is widely used, but they have the drawba
 
 This is where momentum can be applied. Momentum is a technique that improves optimization quality. It can be thought of as a ball that rolls down the loss function. A simple gradient descent method will stop as soon as it reaches a local minimum, but with momentum applied, the point will keep moving even after reaching a local minimum and may reach a lower minimum.
 <p align="center">
-  <img src="/assets/img/2025-10-20-optimizing-gradient-descent/momentum.gif" width="80%" height="80%">
+  <img src="/assets/img/2025-10-18-optimizing-gradient-descent/momentum.gif" width="80%" height="80%">
  </p>
 <p align="center"><b><i>SGD and SGD with Momentum</i></b></p>
 Momentum is defined by adding a vector in the direction of past weight updates, combining the previous update with the current gradient.
@@ -102,7 +102,7 @@ Another advantage is that it allows **faster convergence**. As mentioned above, 
 3. A larger learning rate along consistent directions due to exponential accumulation of past gradients.
 
 <p align="center">
-  <img src="/assets/img/2025-10-20-optimizing-gradient-descent/momentum2.gif" width="80%" height="80%">
+  <img src="/assets/img/2025-10-18-optimizing-gradient-descent/momentum2.gif" width="80%" height="80%">
  </p>
 <p align="center"><b><i>SGD and SGD with Momentum</i></b></p>
 
@@ -115,7 +115,7 @@ Assume that we have two features, each with weights \\(w_1\\) and \\(w_2\\). Eac
 \\[ w_2 = w_2 - \eta \frac{\partial E}{\partial w_2} \\]
 If \\(w_1\\) is updated with big steps and \\(w_2\\) with small steps for a given learning rate, its convergence would be inefficient and may be prone to oscillation, since the learning rate is **fixed** regardless of the variable and gradient. We can think of it as the point moving along a path that does not directly lead to a local minimum.
 <p align="center">
-  <img src="/assets/img/2025-10-20-optimizing-gradient-descent/lr.png" width="80%" height="80%">
+  <img src="/assets/img/2025-10-18-optimizing-gradient-descent/lr.png" width="80%" height="80%">
 </p>
 
 ## Adagrad
@@ -152,7 +152,7 @@ In practice, \\(m^t_i\\) and \\(G^t_i\\) are replaced with \\(\hat{m^t_i}\\) and
 Finally, below is a famous image of how each optimization method behaves when starting from a saddle point.
 
 <p align="center">
-  <img src="/assets/img/2025-10-20-optimizing-gradient-descent/saddle.gif" width="80%" height="80%">
+  <img src="/assets/img/2025-10-18-optimizing-gradient-descent/saddle.gif" width="80%" height="80%">
  </p>
 <p align="center"><b><i>SGD and SGD with Momentum</i></b></p>
 
