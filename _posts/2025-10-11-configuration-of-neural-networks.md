@@ -5,8 +5,8 @@ date: Tue Oct 11 21:59:50 KST 2025
 description: How to configure neural networks to solve a problem (SWE3052)
 img: Deep-Learning-neural-network.png
 fig-caption: # Add figcaption (optional)
-# tags: [Artificial Intelligence, Neural Networks, Deep Neural Networks, Regression, Binary-Class Classification, Multi-Class Classification, Classification]
-visibility: private
+tags: [Artificial Intelligence, Neural Networks, Deep Neural Networks, Regression, Binary-Class Classification, Multi-Class Classification, Classification]
+visibility: public
 bmac: hide
 ---
 # Contents
