@@ -50,14 +50,14 @@ The solution is to change the activation function of the output node into a line
   <img src="/assets/img/2025-09-12-nnoverview/bias.jpg" width="60%" height="60%">
  </p>
 
-Let \$y\$ be the output value of the neural network and \$y_1\$, \$y_2\$ be the output values of the hidden layer. Assuming bias exists, the weighted sum of the output node would be
+Let \$y\$ be the output value of the neural network, and \$y_1\$, \$y_2\$ be the output values of the hidden layer. Assuming bias exists, the weighted sum of the output node would be
 \$\$
 y = y_1w_1 + y_2w_2 + w_3
 \$\$
 
 The range of \$y_1\$ and \$y_2\$ is between 0 and 1 because it is the result of a sigmoid function and \$w_1\$, \$w_2\$ are both real numbers. Therefore, the weighted sum of the output node is a real number and the neural network will work fine without an activation function in the output node. We can also say that removing the activation function has the same effect as using a linear activation function.
 
-If we interpret this mathematically, we can express the whole process in terms of matrices.
+We can also express the process with matrices.
 <p align="center">
   <img src="/assets/img/2025-10-11-configuration-of-neural-networks/regression.webp" width="70%" height="70%">
  </p>
@@ -65,15 +65,15 @@ If we interpret this mathematically, we can express the whole process in terms o
 Let the input layer have inputs \$x_i\$, hidden layer 1 have weighted sum \$s_i\$, return value \$h_i\$ and hidden layer 2 have weighted sum \$\sigma_i\$, return value \$H_i\$ and \$y\$ be the output value, where \$i\$ is the index of each node in a layer. We can express them as vectors, and with each step, the vector is being transformed into another vector.
 \$\$
 \begin{bmatrix} x_1 \\\\\\\\ x_2 \\\\\\\\ x_3 \end{bmatrix} \Rightarrow
-\begin{bmatrix} s_1 \\\\\\\\ s_2 \\\\\\\\ s_3 \\\\\\\\ s_4 \end{bmatrix} \Rightarrow
+\begin{bmatrix} s_1 \\\\\\\\ s_2 \\\\\\\\ s_3 \\\\\\\\ s_4 \end{bmatrix} \rightarrow
 \begin{bmatrix} h_1 \\\\\\\\ h_2 \\\\\\\\ h_3 \\\\\\\\ h_4 \end{bmatrix} \Rightarrow
-\begin{bmatrix} \sigma_1 \\\\\\\\ \sigma_2 \\\\\\\\ \sigma_3 \\\\\\\\ \sigma_4 \end{bmatrix} \Rightarrow
+\begin{bmatrix} \sigma_1 \\\\\\\\ \sigma_2 \\\\\\\\ \sigma_3 \\\\\\\\ \sigma_4 \end{bmatrix} \rightarrow
 \begin{bmatrix} H_1 \\\\\\\\ H_2 \\\\\\\\ H_3 \\\\\\\\ H_4 \end{bmatrix} \Rightarrow
 ...
 \Rightarrow y
 \$\$
 
-Each step is a vector transformation, and where it is a simple weighted sum, we can express it as a linear transformation like below.
+Each step is a linear or non-linear vector transformation. The two-lined arrow indicates a linear transformation and the single-lined arrow indicates a non-linear transformation. A simple weighted sum can be expressed as a linear transformation like below.
 
 \$\$
 \begin{bmatrix} 
@@ -129,9 +129,7 @@ Fail
 \end{bmatrix}
 \$\$
 
-However, since a neural network cannot output categorical values, we must preprocess the labels into numbers. In this case we will change pass and fail to 1 and 0 respectively. We can use a sigmoid function in the output node.
-
-However, the sigmoid function outputs a value between 0 and 1, e.g. 0.7. Since it's note exactly 0 or 1, we cannot directly assign it to a class. The solution is to interpret the output value as a **probability**. If the neural network outputs 0.7, we can say this student has a 70% chance of passing this course.
+However, since a neural network cannot output categorical values, we must preprocess the labels into numbers. In this case we will change pass and fail to 1 and 0 respectively. The sigmoid function in the output node gives a value between 0 and 1, e.g. 0.7. Since it's note exactly 0 or 1, we cannot directly assign it to a class. The solution is to interpret the output value as a **probability**. If the neural network outputs 0.7, we can say this student has a 70% chance of passing this course.
 
 Since we are interpreting the output differently, we also need to make changes in the training process. In prior examples, we used mean squared error to calculate the loss and gradient. We chose mean squared error because it allows us to directly find weights that minimize the difference between the returned value. However, in this case since we are aiming to maximize the probability that the neural network correctly predicts the training data, we must find weights that maximize the following.
 
@@ -143,23 +141,7 @@ This is equivalent to finding weights that minimize
 \$\$
     E = -\sum^N_{n=1}(t_nlog(y_n) + (1-t_n)log(1-y_n))
 \$\$
-We call this **cross entropy loss** and there is good post about deriving back propagation with cross entropy [here](https://medium.com/data-science/deriving-backpropagation-with-cross-entropy-loss-d24811edeaf9), written by Essam Wisam.
-
-One reason why we don't use mean squared error is because during training, mislearned data can cause the neural network get stuck. Assume an extreme case where \$y_t = 1\$ but \$y = 0\$ instead.
-\$\$ s_1 = x_t \cdot w_1 \$\$
-\$\$ h = sigmoid(s_1) \$\$
-\$\$ s_2 = h \cdot w_2 \$\$
-\$\$ y = sigmoid(s_2) \$\$
-\$\$ E = \frac{1}{2}(y_t-y)^2 \$\$
-\$\$ 
-    \frac{\partial E}{\partial w_2} 
-    = \frac{\partial E}{\partial y} \frac{\partial y}{\partial s_2} \frac{\partial s_2}{\partial w_2} 
-    = -(y_t - y)y(1 - y)h
-\$\$
-- \$x_t\$: input
-- \$y_t\$: target output
-
-If \$y=0\$, the gradient is 0. This will stop the training. In normal cases, this would mean the training is done, but in this case it will learn wrong information. Differentiation of cross entropy loss looks like this.
+We call this **cross entropy loss** and there is good post about deriving back propagation with cross entropy <a href="https://medium.com/data-science/deriving-backpropagation-with-cross-entropy-loss-d24811edeaf9" target="_blank">here</a>, written by Essam Wisam. Differentiation of cross entropy loss looks like this.
 \$\$ ... \$\$
 \$\$
     E = -(y_tlog(y) + (1-y_t)log(1-y))
@@ -173,13 +155,27 @@ If \$y=0\$, the gradient is 0. This will stop the training. In normal cases, thi
     = (-y_t(1-y) + (1-y_t)y)h
 \$\$
 
-So we use cross entropy loss instead of mean squared error in binary class classification.
+One reason why we don't use mean squared error is because during training, mislearned data can cause the neural network get stuck. Assume an extreme case where the target output is 1 but the neural network gives 0 instead.
+\$\$ s_1 = x_t \cdot w_1 \$\$
+\$\$ h = sigmoid(s_1) \$\$
+\$\$ s_2 = h \cdot w_2 \$\$
+\$\$ y = sigmoid(s_2) \$\$
+\$\$ E = \frac{1}{2}(y_t-y)^2 \$\$
+\$\$ 
+    \frac{\partial E}{\partial w_2} 
+    = \frac{\partial E}{\partial y} \frac{\partial y}{\partial s_2} \frac{\partial s_2}{\partial w_2} 
+    = -(y_t - y)y(1 - y)h
+\$\$
+- \$x_t\$: input
+- \$y_t\$: target output
+
+If \$y=0\$, the gradient is 0. This will stop the training. In normal cases, this would mean the training is done, but in this case it will learn wrong information. Therfore, we use cross entropy loss instead of mean squared error in binary class classification.
 
 In summary, to configure a neural network to solve a binary-class classification problem, we need to preprocess the data into real numbers, apply a sigmoid function at the output node and use cross entropy loss for training.
 
 # Multi-Class Classification
 
-What if we have more than 2 classes to choose from? Let's say we have a task where we have to determine whether the picture describes a cat, dog or bird based on size, weight and age.
+What if we have more than two classes to choose from? Suppose we need to determine whether a picture shows a cat, a dog, or a bird based on its size, weight, and age.
 
 \$\$
 \begin{bmatrix}
@@ -201,7 +197,7 @@ Bird
 \end{bmatrix}
 \$\$
 
-Just like we did in binary class classification, we need to preprocess our data into a format the neural network can use. If we take the same approach, we can handle the nominal values with linear conversion. We can convert cat, dog and bird to 0, 0.5 and 1 respectively. Then apply the sigmoid function as the activation function to the output node. It seems reasonable, but there is a problem with this method. Cat, dog and bird do not have a hierarchical order. They are different labels within the same 'species' class. labeling them as 0, 0.5 and 1 sets a hierarchy, and this changes the original problem. Instead of linear conversion, we can preprocess the data using **one-hot encoding**. Since we have 3 categories, we can convert each class into a 3 dimensional vector like below.
+Just like we did in binary class classification, we need to preprocess our data into a format the neural network can use. If we take the same approach, we can handle the nominal values with linear conversion. We can convert cat, dog and bird to 0, 0.5 and 1 respectively, then apply the sigmoid function as the activation function to the output node. It seems reasonable, but there is a problem with this method. Cat, dog and bird do not have a hierarchical order. They are different labels within the same 'species' class. labeling them as 0, 0.5 and 1 sets a hierarchy, and this changes the original problem. Instead of linear conversion, we can preprocess the data using **one-hot encoding**. Since we have 3 categories, we can convert each class into a 3 dimensional vector like below.
 - Cat: \$[ 1 \space\space 0 \space\space 0 ]\$
 - Dog: \$[ 0 \space\space 1 \space\space 0 ]\$
 - Bird: \$[ 0 \space\space 0 \space\space 1 ]\$
