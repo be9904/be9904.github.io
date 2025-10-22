@@ -28,20 +28,28 @@ Previously, we discussed how to design a simple neural network. We define a perc
 # Learning with Gradient Descent
 
 The basic idea of learning is to find weight values that produce outputs as close as possible to the given (target) outputs.
-\\[ NN(w,x)\approx t\space\space\text{for all}\space (x,t) \\]
-\\[ \Leftrightarrow 0 \approx \sum_{(x,t)\in data}\|t-NN(w,x)\| \\]
-\\[ \Leftrightarrow 0 \approx \sum_{(x,t)\in data}(t-NN(w,x))^2 \\]
-\\[ \Leftrightarrow E(w) = \sum_{(x,t)\in data}(t-NN(w,x))^2 \space\space\text{minimized}\\]
-- \\(x\\): input
-- \\(t\\): target output
-- \\(NN\\): neural network to train
-- \\(E\\): loss function
+\$\$
+NN(w,x)\approx t\space\space\text{for all}\space (x,t)
+\$\$
+\$\$
+\Leftrightarrow 0 \approx \sum_{(x,t)\in data}\|t-NN(w,x)\|
+\$\$
+\$\$
+\Leftrightarrow 0 \approx \sum_{(x,t)\in data}(t-NN(w,x))^2
+\$\$
+\$\$
+\Leftrightarrow E(w) = \sum_{(x,t)\in data}(t-NN(w,x))^2 \space\space\text{minimized}
+\$\$
+- \$x\$: input
+- \$t\$: target output
+- \$NN\$: neural network to train
+- \$E\$: loss function
 
 The mathematical problem we need to solve is this.
-- Find weights \\(\textbf{w}=(w_1,w_2, ... ,w_n)\\) that minimize \\(E(w) = \sum_{(x,t)\in data}(t-NN(w,x))^2\\)
+- Find weights \$\textbf{w}=(w_1,w_2, ... ,w_n)\$ that minimize \$E(w) = \sum_{(x,t)\in data}(t-NN(w,x))^2\$
 
 To solve this, we take the following steps.
-1. Randomly initialize \\(w\\)
+1. Randomly initialize \$w\$
 2. Find the gradient at the current position
 3. Move down the loss function along with the gradient
 4. Repeat until a local minimum is reached.
@@ -50,10 +58,12 @@ To solve this, we take the following steps.
 
 In the steps above, **error back propagation** is used to compute gradients, and **gradient descent** is applied to update weights that minimize loss. Note that even though there is some other local minimum or a global minimum that is smaller, the process stops when any local minimum is reached and there is no way to verify whether there is a better minimum. Gradient descent can be mathematically written as follows.
 
-\\[ w^{t+1} = w^t - \eta \frac{\partial E}{\partial w}\bigg\|_{w=w^t} \\]
-- \\(\eta\\): learning rate
-- \\(w^t\\): current position
-- \\(\frac{\partial E}{\partial w}\bigg\|_{w=w^t}\\): gradient at current position
+\$\$
+w^{t+1} = w^t - \eta \frac{\partial E}{\partial w}\bigg\|_{w=w^t}
+\$\$
+- \$\eta\$: learning rate
+- \$w^t\$: current position
+- \$\frac{\partial E}{\partial w}\bigg\|_{w=w^t}\$: gradient at current position
 
 The gradient at the current position, multiplied by the learning rate (step size), is subtracted from the current weights, moving the point down the loss function. The learning rate doesn't need to change for each iteration because, as the weights approach a minimum, the gradient naturally decreases, automatically reducing step size and preventing oscillation. Here is a pseudocode for gradient descent.
 ```python
@@ -66,7 +76,9 @@ Until stopping condition satisfied
 ```
 
 To calculate gradients, we need to differentiate the loss function with respect to each weight. This can be done by getting the partial derivative of the loss function.
-\\[ \frac{dE(w)}{dw_k} = \frac{d}{dw_k} \sum_{(x,t)\in Data}(t-NN(w,x))^2 = \sum_{(x,t)\in Data}\frac{d}{dw_k}(t-NN(w,x))^2 \\]
+\$\$
+\frac{dE(w)}{dw_k} = \frac{d}{dw_k} \sum_{(x,t)\in Data}(t-NN(w,x))^2 = \sum_{(x,t)\in Data}\frac{d}{dw_k}(t-NN(w,x))^2
+\$\$
 
 ## Activation Function
 
@@ -78,8 +90,12 @@ Recall the cell body of a perceptron contains a linear weighted sum and an **act
 <p align="center"><b><i>Sigmoid Activation Function</i></b></p>
 
 One notable property of the sigmoid function is that its derivative can be expressed in terms of the function itself.
-\\[ \sigma(x) = \frac{1}{1 + e^{-x}} \\]
-\\[ \frac{d}{dx}\sigma(x) = \sigma(x)(1-\sigma(x)) \\]
+\$\$
+\sigma(x) = \frac{1}{1 + e^{-x}}
+\$\$
+\$\$
+\frac{d}{dx}\sigma(x) = \sigma(x)(1-\sigma(x))
+\$\$
 This makes gradient computations convenient in neural networks.
 
 # Example of Error Back Propagation
