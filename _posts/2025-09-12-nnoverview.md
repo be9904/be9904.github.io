@@ -17,7 +17,7 @@ bmac: hide
 
 # Introduction
 
-A neural network is a machine learning model that stacks perceptrons in layers and its structure is inspired by the human brain. The human brain has countless neurons connected into a network, each sending signals to other neurons. While a neural network also aims to follow this structure, it consists of layers with several perceptrons in each layer. This structural choice is due to simplicity in implementation. 
+A neural network is a machine learning model that stacks perceptrons in layers and its structure is inspired by the human brain. The human brain has countless neurons connected into a network, sending signals to each other. While a neural network also aims to follow this structure, it consists of layers with several perceptrons in each layer. This structural choice is due to simplicity in implementation. 
 <p align="center">
   <img src="/assets/img/2025-09-12-nnoverview/Kelly_Neural_network.jpg" width="70%" height="70%">
  </p>
@@ -38,9 +38,9 @@ Neurons can be represented mathematically as follows.
 <p align="center"><b><i>Mathematical Representation of a Neuron</i></b></p>
 - \$x_i\$: input (dendrites)
 - \$w_i\$: connection strength/weight (amount of receptors in each dendrite)
-- \$b\$: bias
 - \$z\$ & \$f\$: cell body
 - \$y\$: output (axon)
+- \$b\$: bias
 
 Each input has its own connection weight, and stronger connection strength means more signals can be sent to the next neuron. A neuron here is defined as a cell, not a computer. This means it doesn't perform heavy calculations or solve complex problems; instead it takes in signals (data) and stores them until it reaches a threshold. We can think of it as a bucket, where signals accumulate until the bucket cannot hold any more, sending them out to the next connected neuron(s). Mathematically, this analogy is expressed as follows.
 - The first function, equivalent to \$z\$ in the above image calculates the weighted sum of inputs.
@@ -63,7 +63,7 @@ For input values \$x_1\$ and \$x_2\$, the location of point (\$x_1\$, \$x_2\$) w
  </p>
 <p align="center"><b><i>Linearly Separating Samples</i></b></p>
 
-Since a perceptron computes the weighted sum of its inputs linearly and applies a threshold to the result, it can only separate data that are linearly separable. As a result, it cannot solve non-linearly separable problems.
+Since a perceptron computes the weighted sum of its inputs linearly and applies a threshold to the result, it can only create a linear boundary. As a result, it cannot solve non-linearly separable problems.
 
 # Neural Networks
 
@@ -95,3 +95,5 @@ Without adding a bias, the decision boundary would always have to pass the origi
 [Linear Separability and the XOR Problem](https://automaticaddison.com/linear-separability-and-the-xor-problem/)
 
 [Incorporating Bias Nodes Into Your Neural Network](https://www.allaboutcircuits.com/technical-articles/incorporating-bias-nodes-into-your-neural-network/)
+
+<p align="right"><b><i><a href="https://be9904.github.io/learning-algorithm/">Next Post</a></i></b></p>

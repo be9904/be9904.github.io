@@ -175,3 +175,5 @@ To sum up, it is important to find the optimal **number of neurons** and **train
 [Sigmoid Function](https://www.geeksforgeeks.org/machine-learning/derivative-of-the-sigmoid-function/)
 
 [Underfitting vs. Overfitting](https://scikit-learn.org/stable/auto_examples/model_selection/plot_underfitting_overfitting.html)
+
+<p align="right"><b><i><a href="https://be9904.github.io/configuration-of-neural-networks/">Next Post</a></i></b></p>

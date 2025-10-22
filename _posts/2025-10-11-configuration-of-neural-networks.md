@@ -242,3 +242,5 @@ We've discussed regression, binary class classification and multi class classifi
 [Getting started with Neural Network for regression and Tensorflow](https://medium.com/@rajatgupta310198/getting-started-with-neural-network-for-regression-and-tensorflow-58ad3bd75223)
 
 [Multi-Head Deep Learning Models for Multi-Label Classification](https://debuggercafe.com/multi-head-deep-learning-models-for-multi-label-classification/)
+
+<p align="right"><b><i><a href="https://be9904.github.io/optimizing-gradient-descent/">Next Post</a></i></b></p>
