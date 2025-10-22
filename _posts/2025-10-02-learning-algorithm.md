@@ -65,7 +65,7 @@ w^{t+1} = w^t - \eta \frac{\partial E}{\partial w}\bigg\|_{w=w^t}
 - \$w^t\$: current position
 - \$\frac{\partial E}{\partial w}\bigg\|_{w=w^t}\$: gradient at current position
 
-The gradient at the current position, multiplied by the learning rate (step size), is subtracted from the current weights, moving the point down the loss function. The learning rate doesn't need to change for each iteration because, as the weights approach a minimum, the gradient naturally decreases, automatically reducing step size and preventing oscillation. Here is a pseudocode for gradient descent.
+The gradient at the current position, multiplied by the learning rate (step size), is subtracted from the current weights, moving the point down the loss function. The learning rate doesn't need to change for each iteration, because as the weights approach a minimum, the gradient naturally decreases, automatically reducing step size and preventing oscillation. Here is a pseudocode for gradient descent.
 ```python
 Random init w_0, w_1, ...
 Repeat
@@ -82,7 +82,7 @@ To calculate gradients, we need to differentiate the loss function with respect 
 
 ## Activation Function
 
-Recall the cell body of a perceptron contains a linear weighted sum and an **activation function**. Since we are back propagating, we need to be able to get a gradient value from every part of the network. Using a hard limit like before would be pointless because it is not differentiable and all gradient values are 0 except for at the threshold. So we replace this with another activation called the **sigmoid** activation function.
+Recall that the cell body of a perceptron computes a linear weighted sum followed by an **activation function**. According to the chain rule, we need to be able to get a gradient value from every part of the network. Using a hard limit like before would be pointless because it is not differentiable and all gradient values are 0 except for at the threshold. So we replace this with another activation function called the **sigmoid** function.
 
 <p align="center">
   <img src="/assets/img/2025-10-02-learning-algorithm/sigmoid.png" width="80%" height="80%">
@@ -109,32 +109,32 @@ Assume we create a neural network for a XOR logic classifier. Unlike previous si
 
 We'll then randomly initialize weights like below.
 
-| x_1 | x_2 | t | y |
-| --- | --- | - | - |
-| 1 | 1 | 0 |  0.52 |
-| 1 | 0 | 1 |  0.50 |
-| 0 | 1 | 1 |  0.52 |
-| 0 | 0 | 0 |  0.55 |
+| \$x_1\$ | \$x_2\$ | \$t\$ |   \$y\$   |
+| ------- | ------- | ----- | --------- |
+|    1    |    1    |   0   |  **0.52** |
+|    1    |    0    |   1   |  **0.50** |
+|    0    |    1    |   1   |  **0.52** |
+|    0    |    0    |   0   |  **0.55** |
 
 <p align="center"><b><i>Iteration: 0</i></b></p>
 
 As we keep updating weights, we can see the expected results getting somewhat close to the target output.
 
-| x_1 | x_2 | t | y |
-| --- | --- | - | - |
-| 1 | 1 | 0 |  0.30 |
-| 1 | 0 | 1 |  0.81 |
-| 0 | 1 | 1 |  0.81 |
-| 0 | 0 | 0 |  0.11 |
+| \$x_1\$ | \$x_2\$ | \$t\$ |   \$y\$   |
+| ------- | ------- | ----- | --------- |
+|    1    |    1    |   0   |  **0.30** |
+|    1    |    0    |   1   |  **0.81** |
+|    0    |    1    |   1   |  **0.81** |
+|    0    |    0    |   0   |  **0.11** |
 
 <p align="center"><b><i>Iteration: 3000</i></b></p>
 
-| x_1 | x_2 | t | y |
-| --- | --- | - | - |
-| 1 | 1 | 0 |  0.02 |
-| 1 | 0 | 1 |  0.98 |
-| 0 | 1 | 1 |  0.98 |
-| 0 | 0 | 0 |  0.02 |
+| \$x_1\$ | \$x_2\$ | \$t\$ |   \$y\$   |
+| ------- | ------- | ----- | --------- |
+|    1    |    1    |   0   |  **0.02** |
+|    1    |    0    |   1   |  **0.98** |
+|    0    |    1    |   1   |  **0.98** |
+|    0    |    0    |   0   |  **0.02** |
 
 <p align="center"><b><i>Iteration: 10000</i></b></p>
 
