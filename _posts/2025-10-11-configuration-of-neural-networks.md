@@ -50,7 +50,7 @@ The solution is to change the activation function of the output node into a line
   <img src="/assets/img/2025-09-12-nnoverview/bias.jpg" width="60%" height="60%">
  </p>
 
-Let \$y\$ be the output value of the neural network and \$y_1\$, \$y_2\$ be the output values of the hidden layer. Assuming bias exists, the weighted sum of the output node would be
+Let $y$ be the output value of the neural network and $y_1$, $y_2$ be the output values of the hidden layer. Assuming bias exists, the weighted sum of the output node would be
 \$\$
 y = y_1w_1 + y_2w_2 + w_3
 \$\$
