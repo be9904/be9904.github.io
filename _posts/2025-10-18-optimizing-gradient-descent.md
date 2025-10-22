@@ -75,7 +75,7 @@ Repeat
         w = w - lr * g_sum
     end
 ```
-One notable part of the process is that different gradient values are used for each batch. For example, if we set the batch size as 2, the first batch uses \$\frac{\partial E_1}{\partial w_m} + \frac{\partial E_2}{\partial w_m}\$, the next batch uses \$\frac{\partial E_3}{\partial w_m} + \frac{\partial E_4}{\partial w_m}\$, and so on. This is because using the same value for every batch will lead to biased results, consequently degrading accuracy.
+One notable part of the process is that different gradient values are used for each batch. For example, if we set the batch size as 2, the first batch uses \$\frac{\partial E_1}{\partial w_m} + \frac{\partial E_2}{\partial w_m}\$, the next batch uses \$\frac{\partial E_3}{\partial w_m} + \frac{\partial E_4}{\partial w_m}\$, and so on. This is because using the same value for every batch will lead to biased results, degrading accuracy.
 
 Stochastic gradient descent and mini batch gradient descent both provide a good estimation of the true gradient and allow high throughput, allowing a large number of GPU cores to be used at once, which enables fast convergence. However, when datasets have high variance, the results may be noisy and inaccurate. Mini batch gradient descent (n samples) usually yields better results and is more stable than stochastic gradient descent (1 sample), but it still differs from batch gradient descent (all samples) in terms of gradient values.
 
@@ -89,32 +89,32 @@ This is where momentum can be applied. Momentum is a technique that improves opt
  </p>
 <p align="center"><b><i>SGD and SGD with Momentum</i></b></p>
 Momentum is defined by adding a vector in the direction of past weight updates, combining the previous update with the current gradient.
-\$\$ m^t = \gamma m^{t-1} - \eta g^t \$\$
+\$\$ m^t = \beta m^{t-1} - \eta g^t \$\$
 \$\$ w^t = w^{t-1} + m^t \$\$
 - \$g^t\$: gradient at iteration t
-- \$\gamma\$: momentum rate
+- \$\beta\$: momentum rate
 - \$\eta\$: learning rate
 
 Momentum can be written as follows.
 \$\$
-m^t = -\eta(g^t +\gamma g^{t-1} + \gamma^2g^{t-2} + ... + \gamma^{t-1}g^1)
+m^t = -\eta(g^t +\beta g^{t-1} + \beta^2g^{t-2} + ... + \beta^{t-1}g^1)
 \$\$
 This is equivalent to saying momentum is the **exponential average** of past gradients. 
 With momentum, the learning process becomes more stable and consistent.
 
 One advantage of momentum is that it helps **escape local minima** (although not guaranteed). If we assume a scenario where \$g^t\$ is a value close to 0,
 \$\$
-m^t = -\eta(g^t + \gamma g^{t-1} + \gamma^2g^{t-2} + ... + \gamma^{t-1}g^1)
+m^t = -\eta(g^t + \beta g^{t-1} + \beta^2g^{t-2} + ... + \beta^{t-1}g^1)
 \$\$
 \$\$
-= -\eta(\gamma g^{t-1} + \gamma^2g^{t-2} + ... + \gamma^{t-1}g^1) 
+= -\eta(\beta g^{t-1} + \beta^2g^{t-2} + ... + \beta^{t-1}g^1) 
 \$\$
 We can see that even though \$g^t\$ is 0, the past values have been accumulated and are not 0, meaning it will still update and converge to some local minimum.
 
 Another advantage is that it allows **faster convergence**. As mentioned above, gradients are accumulated exponentially, which results in:
 1. Momentum being amplified in areas where gradient directions are consistent, e.g. shallow directions where gradient values are close to 0.
-2. Reduced oscillation in steep directions because gradients with alternating signs cancel each other out.
-3. A larger learning rate along consistent directions due to exponential accumulation of past gradients.
+2. A larger learning rate along consistent directions due to exponential accumulation of past gradients.
+3. Reduced oscillation in steep directions because gradients with alternating signs cancel each other out.
 
 <p align="center">
   <img src="/assets/img/2025-10-18-optimizing-gradient-descent/momentum2.gif" width="80%" height="80%">
