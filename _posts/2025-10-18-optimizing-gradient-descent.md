@@ -179,7 +179,7 @@ Finally, below is a famous image of how each optimization method behaves when st
 <p align="center">
   <img src="/assets/img/2025-10-18-optimizing-gradient-descent/saddle.gif" width="80%" height="80%">
  </p>
-<p align="center"><b><i>SGD and SGD with Momentum</i></b></p>
+<p align="center"><b><i>Gradient Descent Methods on a Saddle Point</i></b></p>
 
 # References
 [Optimization with Momentum](https://gbhat.com/machine_learning/optimize_with_momentum.html)
