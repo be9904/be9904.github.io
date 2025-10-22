@@ -36,21 +36,28 @@ Neurons can be represented mathematically as follows.
   <img src="/assets/img/2025-09-12-nnoverview/artificial_neuron.webp" width="80%" height="80%">
  </p>
 <p align="center"><b><i>Mathematical Representation of a Neuron</i></b></p>
-- \\(x_i\\): input (dendrites)
-- \\(w_i\\): connection strength/weight (amount of receptors in each dendrite)
-- \\(b\\): bias
-- \\(z\\) & \\(f\\): cell body
-- \\(y\\): output (axon)
+- \$x_i\$: input (dendrites)
+- \$w_i\$: connection strength/weight (amount of receptors in each dendrite)
+- \$b\$: bias
+- \$z\$ & \$f\$: cell body
+- \$y\$: output (axon)
 
 Each input has its own connection weight, and stronger connection strength means more signals can be sent to the next neuron. A neuron here is defined as a cell, not a computer. This means it doesn't perform heavy calculations or solve complex problems; instead it takes in signals (data) and stores them until it reaches a threshold. We can think of it as a bucket, where signals accumulate until the bucket cannot hold any more, sending them out to the next connected neuron(s). Mathematically, this analogy is expressed as follows.
-- The first function, equivalent to \\(z\\) in the above image calculates the weighted sum of inputs.
-\\[ s = x_1w_1 + x_2w_2 + ... + x_nw_n = \sum^n_{i=1}x_iw_i \\]
-- The second function, equivalent to \\(f\\) in the above image evaluates the weighted sum with a non-linear threshold. The example below is a hard limit and in this case the threshold is 0.
-\\[ y = \begin{cases} 1 (s\ge 0) \\\\ 0 (s<0) \end{cases}\\]
+- The first function, equivalent to \$z\$ in the above image calculates the weighted sum of inputs.
+\$\$
+s = x_1w_1 + x_2w_2 + ... + x_nw_n = \sum^n_{i=1}x_iw_i
+\$\$
+
+- The second function, equivalent to \$f\$ in the above image evaluates the weighted sum with a non-linear threshold. The example below is a hard limit and in this case the threshold is 0.
+\$\$
+y = \begin{cases} 1 (s\ge 0) \\\\\\\\ 0 (s<0) \end{cases}
+\$\$
 
 Notice that the first function (weighted sum) can also be geometrically interpreted as a linear equation in a 2D space.
-\\[ x_1w_1 + x_2w_2 + w_3 = 0 \\]
-For input values \\(x_1\\) and \\(x_2\\), the location of point (\\(x_1\\), \\(x_2\\)) would be either above the line, on the line or below the line. If we have a dataset with various inputs, we can interpret them as distinct points on the \\(x_1x_2\\) plane and line \\( x_1w_1 + x_2w_2 + w_3 = 0 \\) linearly separating those points.
+\$\$
+x_1w_1 + x_2w_2 + w_3 = 0
+\$\$
+For input values \$x_1\$ and \$x_2\$, the location of point (\$x_1\$, \$x_2\$) would be either above the line, on the line or below the line. If we have a dataset with various inputs, we can interpret them as distinct points on the \$x_1x_2\$ plane and line \$ x_1w_1 + x_2w_2 + w_3 = 0 \$ linearly separating those points.
 <p align="center">
   <img src="/assets/img/2025-09-12-nnoverview/linearly-separable.png" width="80%" height="80%">
  </p>
@@ -72,7 +79,7 @@ One other important factor of a neural network is **bias**. It is the constant t
  </p>
 <p align="center"><b><i>A Network with a Bias Node</i></b></p>
 
-Recall that we can geometrically interpret the weighted sum as a linear equation in an \\(n\\) dimensional space, where \\(n\\) is the input dimension. In this case, we will assume \\(n = 2\\) for simplicity.
+Recall that we can geometrically interpret the weighted sum as a linear equation in an \$n\$ dimensional space, where \$n\$ is the input dimension. In this case, we will assume \$n = 2\$ for simplicity.
 <p align="center">
   <img src="/assets/img/2025-09-12-nnoverview/bias_graph.png" width="50%" height="50%">
  </p>

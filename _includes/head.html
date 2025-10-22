@@ -4,30 +4,7 @@
     {% if page.title %}{{page.title}} - {{site.title}}{% else %}{{site.title}}{%
     endif %}
   </title>
-  <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      extensions: [
-        "tex2jax.js",
-        "MathMenu.js",
-        "MathZoom.js",
-        "AssistiveMML.js",
-        "a11y/accessibility-menu.js"
-      ],
-      tex2jax: {
-        inlineMath: [['$', '$']],
-        displayMath: [['$$', '$$']]
-      },
-      jax: ["input/TeX", "output/CommonHTML"],
-      TeX: {
-        extensions: [
-          "AMSmath.js",
-          "AMSsymbols.js",
-          "noErrors.js",
-          "noUndefined.js",
-        ]
-      }
-    });
-  </script>
+  {% include mathjax_support.html %}
   <script
     type="text/javascript"
     src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
