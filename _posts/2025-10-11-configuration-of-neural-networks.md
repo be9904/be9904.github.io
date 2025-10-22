@@ -202,9 +202,9 @@ Bird
 \$\$
 
 Just like we did in binary class classification, we need to preprocess our data into a format the neural network can use. If we take the same approach, we can handle the nominal values with linear conversion. We can convert cat, dog and bird to 0, 0.5 and 1 respectively. Then apply the sigmoid function as the activation function to the output node. It seems reasonable, but there is a problem with this method. Cat, dog and bird do not have a hierarchical order. They are different labels within the same 'species' class. labeling them as 0, 0.5 and 1 sets a hierarchy, and this changes the original problem. Instead of linear conversion, we can preprocess the data using **one-hot encoding**. Since we have 3 categories, we can convert each class into a 3 dimensional vector like below.
-- Cat: \$\begin{bmatrix} 1 & 0 & 0 \end{bmatrix}\$
-- Dog: \$\begin{bmatrix} 0 & 1 & 0 \end{bmatrix}\$
-- Bird: \$\begin{bmatrix} 0 & 0 & 1 \end{bmatrix}\$
+- Cat: \$[ 1 \space\space 0 \space\space 0 ]\$
+- Dog: \$[ 0 \space\space 1 \space\space 0 ]\$
+- Bird: \$[ 0 \space\space 0 \space\space 1 ]\$
 
 We can see that each class now has the same distance and to match this format, we can change the number of outputs to the dimension of the classes. This is also equivalent to performing binary classification on each dimension.
 
