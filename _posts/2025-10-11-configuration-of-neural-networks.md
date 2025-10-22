@@ -41,6 +41,8 @@ In previous posts, we discussed the basics of neural networks and how to train o
 \end{bmatrix}
 \$\$
 
+But recall that we had an activation function for every neuron. 
+
 # Binary-Class Classification
 
 # Multi-Class Classification
