@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Overview of Neural Networks
-date: Mon Sep 12 02:35:27 KST 2025
+date: Fri Sep 12 02:35:27 KST 2025
 description: Overview of deep neural networks covered in Introduction to Deep Neural Networks (SWE3052)
 img: Deep-Learning-neural-network.png
 fig-caption: # Add figcaption (optional)

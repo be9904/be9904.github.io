@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Learning Algorithm
-date: Tue Oct 2 01:18:58 KST 2025
+date: Thu Oct 2 01:18:58 KST 2025
 description: Error back propagation, gradient descent, activation functions and more... (SWE3052)
 img: Deep-Learning-neural-network.png
 fig-caption: # Add figcaption (optional)
