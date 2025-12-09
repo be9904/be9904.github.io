@@ -5,7 +5,7 @@ date: Fri Oct 31 19:29:45 KST 2025
 description: The vanishing & exploding gradient problem and mitigation techniques in deep neural networks covered in Introduction to Deep Neural Networks (SWE3052)
 img: Deep-Learning-neural-network.png
 fig-caption: # Add figcaption (optional)
-tags: [Artificial Intelligence, Neural Networks, Deep Neural Networks, Gradient Descent, Dropout, Batch Normalization]
+tags: [Artificial Intelligence, Neural Networks, Deep Neural Networks, Vanishing Gradients, Validation, Dropout, Batch Normalization]
 visibility: public
 bmac: hide
 ---
