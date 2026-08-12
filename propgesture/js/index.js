@@ -62,6 +62,7 @@
     muted: svg('<path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>'),
     sound: svg('<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.1 4.9a10 10 0 0 1 0 14.2"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/>'),
     prev: svg('<polyline points="15 18 9 12 15 6"/>'),
+    refresh: svg('<polyline points="1 4 1 10 7 10"/><path d="M3.5 15a9 9 0 1 0 2.1-9.4L1 10"/>'),
     next: svg('<polyline points="9 18 15 12 9 6"/>')
   };
 
@@ -277,7 +278,14 @@
       });
     });
 
-    var group = { start: start };
+    function restart() {
+      videos.forEach(function (v) {
+        try { v.currentTime = 0; } catch (e) { /* not loaded yet */ }
+      });
+      begin();   // also forces a load for any panel that never started
+    }
+
+    var group = { start: start, restart: restart };
     videos.forEach(function (v) { v.pgGroup = group; });
     return group;
   }
@@ -301,6 +309,26 @@
 
   function observe(video) { playObserver.observe(video); }
 
+  /* A manual replay: restarts every clip in one row from frame 0, and kicks a
+     load for any panel still waiting on a slow connection. */
+  function refreshButton(onClick) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pg-refresh';
+    b.title = 'Restart these clips from the beginning';
+    b.setAttribute('aria-label', 'Restart these clips from the beginning');
+    b.innerHTML = ICONS.refresh;   // icon only; the name lives in title/aria-label
+    b.addEventListener('click', onClick);
+    return b;
+  }
+
+  function actionBar(button) {
+    var bar = document.createElement('div');
+    bar.className = 'pg-actions';
+    bar.appendChild(button);
+    return bar;
+  }
+
   /* ---------------------------------------------------------- grids ---- */
 
   function buildGrid(container) {
@@ -317,6 +345,8 @@
     });
     var group = makeSyncGroup(panels.map(function (p) { return p.video; }));
     panels.forEach(function (p) { observe(p.video); });
+
+    container.parentNode.insertBefore(actionBar(refreshButton(group.restart)), container.nextSibling);
 
     var chipBar = document.querySelector('[data-chips="' + container.dataset.grid + '"]');
     if (!chipBar) return;
@@ -349,7 +379,8 @@
       container.appendChild(p.panel);
       return p.video;
     });
-    makeSyncGroup(videos);
+    var group = makeSyncGroup(videos);
+    container.parentNode.insertBefore(actionBar(refreshButton(group.restart)), container.nextSibling);
     videos.forEach(observe);
   }
 
@@ -440,6 +471,16 @@
       if (Math.abs(dx) > 45) go(index + (dx < 0 ? 1 : -1));
       startX = null;
     });
+
+    function restartSlide() {
+      var vids = slideEls[index].querySelectorAll('video');
+      vids.forEach(function (v) {
+        load(v);
+        try { v.currentTime = 0; } catch (e) { /* not loaded yet */ }
+      });
+      vids.forEach(safePlay);
+    }
+    root.parentNode.insertBefore(actionBar(refreshButton(restartSlide)), root.nextSibling);
 
     go(0);
   }

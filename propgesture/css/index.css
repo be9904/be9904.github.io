@@ -172,6 +172,20 @@ a:hover { color: #1b47ab; }
 @media (max-width: 900px) { .pg-grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 600px) { .pg-grid-3, .pg-grid-2 { grid-template-columns: 1fr; } }
 
+/* ------------------------------------------------------------ actions ---- */
+/* Sits just below the clips it replays. */
+.pg-actions { display: flex; justify-content: flex-start; margin: 0.6rem 0 0; }
+.pg-refresh {
+  display: grid; place-items: center;
+  width: 30px; height: 30px; padding: 0; border-radius: 50%; cursor: pointer;
+  font: inherit; color: var(--pg-fg-soft); background: transparent;
+  border: 1px solid var(--pg-line); transition: all 0.15s ease;
+}
+.pg-refresh:hover { color: var(--pg-fg); border-color: var(--pg-fg-faint); }
+.pg-refresh:active .pg-icon { transform: rotate(-180deg); }
+.pg-refresh .pg-icon { width: 13px; height: 13px; transition: transform 0.3s ease; }
+.pg-alt .pg-refresh { background: #fff; }
+
 /* -------------------------------------------------------------- chips ---- */
 .pg-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; margin-bottom: 1.1rem; }
 .pg-chip {
