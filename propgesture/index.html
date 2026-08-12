@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PropGesture: Few-shot Co-speech Gesture Synthesis for Handheld Props</title>
+  <meta name="description" content="PropGesture generates prop-aware co-speech gestures from speech and a handheld prop, adapting to a wide range of objects in a few-shot manner without object-specific motion capture. Pacific Graphics 2026 / Computer Graphics Forum.">
+  <meta name="keywords" content="co-speech gesture, gesture synthesis, handheld prop, few-shot, motion matching, DeepPhase, flow matching, character animation, Pacific Graphics 2026">
+
+  <meta property="og:title" content="PropGesture: Few-shot Co-speech Gesture Synthesis for Handheld Props">
+  <meta property="og:description" content="Few-shot co-speech gesture synthesis for characters holding objects, without object-specific motion capture.">
+  <meta property="og:image" content="https://be9904.github.io/propgesture/img/teaser.png">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%A4%3C/text%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./css/bulma.min.css">
+  <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+
+<!-- ============================= HERO ============================= -->
+<section class="section pg-hero" id="top">
+  <div class="container is-max-desktop has-text-centered">
+    <h1 class="title is-2 pg-title">PropGesture: Few-shot Co-speech Gesture Synthesis for Handheld Props</h1>
+    <p class="pg-venue">Computer Graphics Forum</p>
+
+    <div class="pg-authors">
+      <span class="pg-author">Jiho Kang<sup>1,*</sup></span>
+      <span class="pg-author">Junghoon Choi<sup>2,*</sup></span>
+      <span class="pg-author"><a href="https://jihun0916.github.io/">Jihun Shin</a><sup>1</sup></span>
+      <span class="pg-author"><a href="https://lava.kaist.ac.kr/?page_id=41">Sung-Hee Lee</a><sup>1</sup></span>
+    </div>
+    <div class="pg-affil">
+      <span><sup>1</sup>Korea Advanced Institute of Science and Technology</span>
+      <span><sup>2</sup>Sungkyunkwan University</span>
+    </div>
+    <div class="pg-affil pg-equal"><span><sup>*</sup>Equal contribution</span></div>
+
+    <div class="pg-buttons">
+      <a class="pg-btn" href="https://youtu.be/m58sP5k4aIM" target="_blank" rel="noopener">
+        <svg class="pg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="4.5" width="21" height="15" rx="4"/><polygon points="10 9 15.5 12 10 15" fill="currentColor" stroke="none"/></svg><span>Video</span>
+      </a>
+      <span class="pg-btn is-disabled" aria-disabled="true">
+        <svg class="pg-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.6.2-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3z"/></svg><span>Code <em>(coming soon)</em></span>
+      </span>
+      <span class="pg-btn is-disabled" aria-disabled="true">
+        <svg class="pg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg><span>Data <em>(coming soon)</em></span>
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= TEASER ============================= -->
+<section class="pg-section pg-teaser-section">
+  <div class="container is-max-widescreen">
+    <img src="./img/teaser.png" alt="PropGesture teaser: characters gesturing while holding a microphone, hand fan, dumbbell, handgun and other props." class="pg-teaser">
+    <p class="pg-caption">
+      PropGesture generates prop-aware co-speech gestures from speech and a handheld prop, adapting to a wide
+      range of objects in a few-shot manner without object-specific motion capture.
+    </p>
+  </div>
+</section>
+
+<!-- ============================= ONE-LINER =============================
+<section class="pg-section pg-statement-section">
+  <div class="container is-max-desktop">
+    <p class="pg-statement">
+      A held prop reshapes the motion of the <strong>holding arm</strong>, while the speech&ndash;gesture process
+      driving the rest of the body stays intact. So adaptation should be <strong>localized to that arm</strong> -
+      not spread across the whole model.
+    </p>
+  </div>
+</section> -->
+
+<!-- ============================= ABSTRACT ============================= -->
+<section class="pg-section" id="abstract">
+  <div class="container is-max-desktop">
+    <h2 class="pg-h2">Abstract</h2>
+    <div class="pg-prose">
+      <p>
+        While co-speech gesture synthesis has made significant progress in generating natural full-body motion from
+        speech, a frequent setting where characters hold objects while speaking remains largely underexplored. The core
+        challenge is that motion capture data cannot be collected at scale for every possible object, making few-shot
+        adaptation a practical necessity. Yet a handful of samples is hard to exploit: conditioning on them as motion
+        examples imposes only a soft prior, yielding intermittent object-aware behavior, while fine-tuning the full
+        model on them either overfits and loses gesture diversity or fails to produce stable, prop-appropriate motion
+        on the holding arm. To address this, we present <strong>PropGesture</strong>, a few-shot framework that adapts
+        to a target prop using a small set of example clips synthesized by a video generation model. Our key design is
+        to localize object adaptation to the prop-holding arm, preserving gesture diversity while introducing
+        object-specific dynamics locally. Specifically, a phase-based arm motion generator, pretrained on large-scale
+        gesture data and fine-tuned on the example clips, resolves the many-to-many speech&ndash;gesture ambiguity
+        through phase sampling and retrieves arm motion via motion matching. This arm motion is then inpainted into a
+        pretrained gesture flow matching model that synthesizes the remaining body from speech. We demonstrate the
+        effectiveness of our method through both perceptual and quantitative comparisons against motion-example-based
+        and fine-tuning-based baselines. Source code and dataset will be released to support follow-up research.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= METHOD ============================= -->
+<section class="pg-section pg-alt" id="method">
+  <div class="container is-max-widescreen">
+    <h2 class="pg-h2">Overview</h2>
+
+    <figure class="pg-figure">
+      <img src="./img/overview.jpg"
+           alt="Overview of the PropGesture framework: gesture latent model, phase generator, few-shot data synthesis, and inference-time inpainting."
+           class="pg-figure-img">
+      <figcaption class="pg-caption">
+        Our framework builds on two pretrained components: a
+        part-disentangled gesture latent flow matching model that generates full-body motion as four part-wise latent
+        tokens (lower body, spine, left arm, right arm) from speech, and an audio-conditioned phase generator for the
+        prop-holding arm. To adapt to a new prop, we synthesize 10&ndash;15 video clips with a video generation model
+        and lift them to SMPL-X motion, then fine-tune the phase generator on this few-shot data.
+      </figcaption>
+    </figure>
+
+    <h3 class="pg-h3">Speech-motion coupling under prop constraints</h3>
+    <div class="pg-prose">
+      <p>
+        Our strategy generates prop-holding arm motion from speech, which presupposes that the two stay coupled even
+        when the hand is occupied. Spearman correlations between nine acoustic features and right-arm joint velocities
+        over 200&nbsp;ms chunks confirm statistically significant coupling for every prop (BH&ndash;FDR
+        <em>q</em>&nbsp;&lt;&nbsp;0.05). But its strength, sign, and active subset vary substantially across props
+        - from broad positive coupling for the pipe to weak, partially negative coupling for the dumbbell -
+        which is why a single prop-agnostic generator will not do, and per-prop adaptation is needed.
+      </p>
+    </div>
+
+    <figure class="pg-figure">
+      <img src="./img/phase-pca-all.png"
+           alt="PCA projections of right-arm DeepPhase trajectories for every prop, comparing the few-shot training clips against trajectories sampled from the prop-adapted generator."
+           class="pg-figure-img">
+      <figcaption class="pg-caption">
+        PCA projections of prop-holding arm DeepPhase trajectories, for all props. For each prop, the few-shot clips
+        used for adaptation are compared against trajectories sampled from the prop-adapted generator on BEAT2 test
+        speech. The generated distributions reproduce each prop-specific envelope shape while covering a broader
+        region, so adaptation captures prop-specific dynamics without collapsing diversity.
+      </figcaption>
+    </figure>
+
+    <figure class="pg-figure">
+      <img src="./img/coupling-all.png"
+           alt="Spearman correlation heatmaps between nine acoustic features and right-arm joint velocity magnitudes, for all ten props."
+           class="pg-figure-img">
+      <figcaption class="pg-caption">
+        Speech-motion coupling across all ten props.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================= VIDEO ============================= -->
+<section class="pg-section" id="video">
+  <div class="container is-max-desktop">
+    <h2 class="pg-h2">Video</h2>
+    <div class="pg-video-placeholder">
+      <div>
+        <svg class="pg-icon pg-icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="2.5"/><line x1="7" y1="3" x2="7" y2="21"/><line x1="17" y1="3" x2="17" y2="21"/><line x1="2" y1="9" x2="7" y2="9"/><line x1="2" y1="15" x2="7" y2="15"/><line x1="17" y1="9" x2="22" y2="9"/><line x1="17" y1="15" x2="22" y2="15"/></svg>
+        <p class="pg-placeholder-title">Supplementary video coming soon</p>
+        <p class="pg-placeholder-sub">The full narrated video will be embedded here once it is live.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= RESULTS ============================= -->
+<section class="pg-section pg-alt" id="results">
+  <div class="container is-max-widescreen">
+    <h2 class="pg-h2">Gestures across props</h2>
+    <div class="pg-prose pg-intro">
+      <p>
+        We define a <b><em>prop</em></b> as any handheld object that, when grasped in one hand, constrains the co-speech
+        gestures of that hand, and organize our ten objects into three categories by how the prop's function interacts
+        with gestural freedom. Some props are shown held in the left hand: left-hand prop holding is obtained by mirroring
+        the synthesized clips and repeating few-shot adaptation on the mirrored data.
+      </p>
+      <p class="pg-hint">
+        <svg class="pg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+        All videos are muted by default - click the speaker icon on any panel to hear its speech.
+      </p>
+    </div>
+
+    <!-- Speech-mediating -->
+    <div class="pg-group">
+      <h3 class="pg-h3">Speech-mediating props</h3>
+      <p class="pg-group-desc">
+        A microphone or mobile phone channels the speaker's voice and must remain near the mouth, tightly coupling the
+        holding arm to the speaking act.
+      </p>
+      <div class="pg-carousel" data-carousel="mediating"></div>
+    </div>
+
+    <!-- Function-compatible -->
+    <div class="pg-group">
+      <h3 class="pg-h3">Function-compatible props</h3>
+      <p class="pg-group-desc">
+        A hand fan, wine glass, dumbbell, briefcase or umbrella can be used while speaking, with the object's weight,
+        grip, or periodic action shaping the motion envelope of the holding hand.
+      </p>
+      <div class="pg-carousel" data-carousel="compatible"></div>
+    </div>
+
+    <!-- Function-precluding -->
+    <div class="pg-group">
+      <h3 class="pg-h3">Function-precluding props</h3>
+      <p class="pg-group-desc">
+        A handgun, sword or smoking pipe cannot be actively used while speaking, so co-speech gesture arises only in
+        the non-use state, where the prop's weight and grip still shape the holding hand's motion.
+      </p>
+      <div class="pg-carousel" data-carousel="precluding"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= COMPARISONS ============================= -->
+<section class="pg-section" id="comparisons">
+  <div class="container is-max-widescreen">
+    <h2 class="pg-h2">Comparisons</h2>
+    <div class="pg-prose pg-intro">
+      <p>
+        We compare against two categories of baselines, corresponding to the two representative strategies for adapting
+        a pretrained gesture model to a handheld prop. <strong>Motion-example-based</strong> methods
+        (SynTalker, MECo) receive our synthesized prop-holding clips as motion exemplars.
+        <strong>LoRA-fine-tuned</strong> methods (EMAGE, DiffSHEG, GestureLSM) receive the same supervision as
+        PropGesture, with adapters fine-tuned per prop on motion extracted from those clips. None of them holds the
+        prop on the arm at the frame level, so prop motion cannot be naturally sustained on the holding arm.
+      </p>
+    </div>
+
+    <div class="pg-chips" data-chips="comparison"></div>
+    <div class="pg-grid pg-grid-3" data-grid="comparison"></div>
+
+    <!-- <h3 class="pg-h3">Perceptual evaluation</h3>
+    <div class="pg-prose">
+      <p>
+        A pairwise preference study (36 participants, 70 pairs spanning all ten props, 7,560 responses) rated
+        PropGesture against each method on a 5-point comparative scale along three independent dimensions. Scores are
+        oriented so that <strong>1 favors the comparison method, 3 is equal, and 5 favors ours</strong>. PropGesture is
+        preferred over all five external baselines on every dimension, and the gap is largest for prop appropriateness.
+      </p>
+    </div> -->
+
+  </div>
+</section>
+
+<!-- ============================= ABLATIONS ============================= -->
+<section class="pg-section pg-alt" id="ablations">
+  <div class="container is-max-widescreen">
+    <h2 class="pg-h2">Ablations</h2>
+
+    <!-- 1. Arm-localized adaptation -->
+    <div class="pg-group">
+      <h3 class="pg-h3">Arm-localized adaptation</h3>
+      <p class="pg-group-desc">
+        <strong>Ours&#8209;DFT</strong> removes arm-localized adaptation and directly fine-tunes the full-body gesture
+        latent model on the few-shot clips; <strong>Ours&#8209;LoRA</strong> instead applies LoRA to that same model.
+        Adapting the whole body at once forces the few prop clips to compete with the model's body-wide speech&ndash;gesture
+        prior: Ours&#8209;DFT overfits and collapses onto a few repetitive patterns, while Ours&#8209;LoRA preserves
+        diversity but cannot reshape the holding arm enough, leaving its prop-specific motion unstable.
+      </p>
+      <div class="pg-chips" data-chips="ala"></div>
+      <div class="pg-grid pg-grid-3" data-grid="ala"></div>
+    </div>
+
+    <!-- 2. Phase generator vs. audio matching -->
+    <div class="pg-group">
+      <h3 class="pg-h3">Phase generator vs. direct audio matching</h3>
+      <p class="pg-group-desc">
+        <strong>Ours&#8209;AM</strong> replaces the phase generator with motion matching driven directly by the nine
+        acoustic features, leaving everything else unchanged. Unlike the motion-intrinsic phase, acoustic features
+        carry no pose information, so acoustically similar frames may be kinematically distant - producing abrupt
+        transitions in the prop-holding arm.
+      </p>
+      <div class="pg-chips" data-chips="am"></div>
+      <div class="pg-grid pg-grid-2" data-grid="am"></div>
+    </div>
+
+    <!-- 3. DNO-RF -->
+    <div class="pg-group">
+      <h3 class="pg-h3">Latent optimization for interpenetration</h3>
+      <p class="pg-group-desc">
+        The frozen flow matching model synthesizes the remaining body coherently with the inpainted arm, but that
+        coherence does not enforce collision-free geometry. Our two-stage latent optimization corrects the right arm
+        and then the left arm in noise space, resolving body&ndash;prop interpenetration while preserving the overall
+        gesture - reducing interpenetration volume from 67.0 to 0.9&nbsp;cm<sup>3</sup>.
+      </p>
+      <div class="pg-grid pg-grid-3" data-grid="dno"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= BIBTEX ============================= -->
+<section class="pg-section" id="bibtex">
+  <div class="container is-max-desktop">
+    <h2 class="pg-h2">BibTeX</h2>
+    <pre class="pg-bibtex"><code>@article{kang2026propgesture,
+  title   = {PropGesture: Few-shot Co-speech Gesture Synthesis for Handheld Props},
+  author  = {Kang, Jiho and Choi, Junghoon and Shin, Jihun and Lee, Sung-Hee},
+  journal = {Computer Graphics Forum},
+  volume  = {45},
+  number  = {7},
+  year    = {2026},
+  note    = {Pacific Graphics 2026},
+}</code></pre>
+  </div>
+</section>
+
+<!-- ============================= FOOTER ============================= -->
+<footer class="pg-footer">
+  <div class="container is-max-desktop has-text-centered">
+    <p>
+      This project is for research and education purposes only, and is not freely available for commercial use or
+      redistribution. The dataset is available only under the terms of the
+      <a href="https://creativecommons.org/licenses/by-nc/4.0/legalcode" target="_blank" rel="noopener">CC BY-NC 4.0</a>
+      license.
+    </p>
+    <p>
+      Website template borrowed from <a href="https://github.com/nerfies/nerfies.github.io" target="_blank" rel="noopener">Nerfies</a>,
+      licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>.
+    </p>
+  </div>
+</footer>
+
+<script src="./js/index.js"></script>
+</body>
+</html>
