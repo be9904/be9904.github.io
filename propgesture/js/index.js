@@ -10,15 +10,15 @@
 
   var PROP_LABEL = {
     microphone: 'Microphone',
-    phone: 'Mobile Phone',
+    phone: 'Phone',
     handfan: 'Hand Fan',
     dumbbell: 'Dumbbell',
     wineglass: 'Wine Glass',
     briefcase: 'Briefcase',
     umbrella: 'Umbrella',
-    gun: 'Handgun',
+    gun: 'Gun',
     sword: 'Sword',
-    pipe: 'Smoking Pipe'
+    pipe: 'Pipe'
   };
 
   // video/method/<stem>.mp4  and  video/mirrored/<stem>_mirrored.mp4
@@ -99,9 +99,9 @@
         { label: 'Ours', method: 'Ours', ours: true },
         { label: 'SynTalker', method: 'SynTalker' },
         { label: 'MECo', method: 'MECo' },
-        { label: 'EMAGE LoRA', method: 'EMAGE_LoRA' },
-        { label: 'DiffSHEG LoRA', method: 'DiffSHEG_LoRA' },
-        { label: 'GestureLSM LoRA', method: 'GestureLSM_LoRA' }
+        { label: 'EMAGE-LoRA', method: 'EMAGE_LoRA' },
+        { label: 'DiffSHEG-LoRA', method: 'DiffSHEG_LoRA' },
+        { label: 'GestureLSM-LoRA', method: 'GestureLSM_LoRA' }
       ],
       src: cmpSrc
     },
@@ -125,9 +125,9 @@
   };
 
   var DNO_PANELS = [
-    { label: 'Ours w/o DNO-RF', file: 'RAW' },
-    { label: 'DNO-RF', file: 'DNO', ours: true },
-    { label: 'DNO-RF visualized', file: 'DNO_debug' }
+    { label: 'Ours w/ DNO-RF', file: 'DNO', ours: true },
+    { label: 'DNO-RF visualized', file: 'DNO_debug' },
+    { label: 'Ours w/o DNO-RF', file: 'RAW' }
   ];
   var DNO_STEM = '13_lu_0_111_111';
 
@@ -152,7 +152,7 @@
     video.playsInline = true;
     video.setAttribute('playsinline', '');
     video.setAttribute('webkit-playsinline', '');
-    video.preload = 'none';
+    video.preload = 'metadata';
     video.disablePictureInPicture = true;
     if (opts.src) video.dataset.src = opts.src;
 
@@ -205,13 +205,81 @@
   function setSrc(video, src) {
     if (video.dataset.src === src && video.src) return;
     video.dataset.src = src;
-    if (video.src || video.dataset.live === '1') {
+    if (video.dataset.live === '1') {
       var wasUnmuted = !video.muted;
-      video.src = src;
+      video.src = src;                 // aborts any in-flight fetch for the old prop
       video.load();
-      video.muted = !wasUnmuted;   // keep the soundtrack on across a prop switch
-      safePlay(video);
+      video.muted = !wasUnmuted;       // keep the soundtrack on across a prop switch
+      if (!video.pgGroup) safePlay(video);
+    } else if (video.src) {
+      // Off-screen: drop the old source so nothing downloads for a prop that is
+      // not being looked at. `load()` picks up dataset.src when it scrolls back.
+      video.removeAttribute('src');
+      video.load();
     }
+  }
+
+  /* Panels in one grid show the same motion from different methods, so they
+     must share a clock. Each element buffers at its own rate and `loop`
+     restarts each one on its own boundary, so left alone they start skewed and
+     never recover - the skew is most visible at the loop seam. We hold playback
+     until every panel can play, start them in the same tick, and then pull any
+     straggler back to the leader (which also re-aligns them after each wrap). */
+  var SYNC_TOLERANCE = 0.1;   // seconds of drift before a follower is reseeked
+
+  function makeSyncGroup(videos) {
+    var leader = videos[0];
+    var token = 0;
+    var queued = false;
+
+    function align() {
+      var t = leader.currentTime;
+      videos.forEach(function (v) {
+        if (v === leader || v.seeking) return;
+        try { v.currentTime = t; } catch (e) { /* not seekable yet */ }
+      });
+    }
+
+    function begin() {
+      var mine = ++token;
+      // Play first. `play()` is what actually starts the fetch, and gating on a
+      // buffering event instead would leave the panels blank whenever autoplay
+      // or preload declines to load anything.
+      videos.forEach(load);
+      videos.forEach(safePlay);
+
+      // Once every panel has a frame, snap them onto the leader's clock.
+      var pending = videos.length;
+      function ready() {
+        if (mine !== token) return;
+        if (--pending === 0) align();
+      }
+      videos.forEach(function (v) {
+        if (v.readyState >= 2) ready();      // HAVE_CURRENT_DATA
+        else v.addEventListener('loadeddata', ready, { once: true });
+      });
+    }
+
+    // Coalesce the burst of calls the observer makes as the row scrolls in.
+    function start() {
+      if (queued) return;
+      queued = true;
+      setTimeout(function () { queued = false; begin(); }, 0);
+    }
+
+    leader.addEventListener('timeupdate', function () {
+      if (leader.paused) return;
+      videos.forEach(function (v) {
+        if (v === leader || v.seeking || v.readyState < 2) return;
+        if (Math.abs(v.currentTime - leader.currentTime) > SYNC_TOLERANCE) {
+          try { v.currentTime = leader.currentTime; } catch (e) { /* ignore */ }
+        }
+      });
+    });
+
+    var group = { start: start };
+    videos.forEach(function (v) { v.pgGroup = group; });
+    return group;
   }
 
   /* Play only what is on screen; load only what is near it. */
@@ -221,7 +289,9 @@
       if (entry.isIntersecting) {
         v.dataset.live = '1';
         load(v);
-        if (!v.closest('.pg-slide') || v.closest('.pg-slide').dataset.active === '1') safePlay(v);
+        if (!v.closest('.pg-slide') || v.closest('.pg-slide').dataset.active === '1') {
+          if (v.pgGroup) v.pgGroup.start(); else safePlay(v);
+        }
       } else {
         v.dataset.live = '0';
         v.pause();
@@ -243,9 +313,10 @@
         src: spec.src(current, col.method)
       });
       container.appendChild(p.panel);
-      observe(p.video);
       return p;
     });
+    var group = makeSyncGroup(panels.map(function (p) { return p.video; }));
+    panels.forEach(function (p) { observe(p.video); });
 
     var chipBar = document.querySelector('[data-chips="' + container.dataset.grid + '"]');
     if (!chipBar) return;
@@ -263,20 +334,23 @@
         panels.forEach(function (p, j) {
           setSrc(p.video, spec.src(prop, spec.cols[j].method));
         });
+        group.start();
       });
       chipBar.appendChild(chip);
     });
   }
 
   function buildDnoGrid(container) {
-    DNO_PANELS.forEach(function (d) {
+    var videos = DNO_PANELS.map(function (d) {
       var p = buildPanel({
         label: d.label, ours: d.ours,
         src: BASE + 'dnorf/' + DNO_STEM + '_' + d.file + '.mp4'
       });
       container.appendChild(p.panel);
-      observe(p.video);
+      return p.video;
     });
+    makeSyncGroup(videos);
+    videos.forEach(observe);
   }
 
   /* ------------------------------------------------------- carousels ---- */
