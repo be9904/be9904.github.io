@@ -91,9 +91,14 @@ a:hover { color: #1b47ab; }
   font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.01em;
 }
 .pg-prose { color: var(--pg-fg-soft); line-height: 1.75; font-size: 1.0rem; }
+/* Flush both margins across body copy. Auto-hyphenation is off so no hyphens
+   are introduced mid-word at line breaks. */
+.pg-prose, .pg-group-desc, .pg-caption {
+  text-align: justify; hyphens: manual; -webkit-hyphens: manual;
+}
 .pg-prose p + p { margin-top: 0.9rem; }
 .pg-prose strong { color: var(--pg-fg); }
-.pg-intro { margin: 0 auto 1.75rem; text-align: center; }
+.pg-intro { margin: 0 auto 1.75rem; }
 .pg-statement {
   font-size: 1.22rem; line-height: 1.65; text-align: center;
   color: var(--pg-fg-soft); max-width: 780px; margin: 0 auto;
@@ -115,7 +120,7 @@ a:hover { color: #1b47ab; }
 }
 .pg-caption {
   margin-top: 0.75rem; font-size: 0.88rem; line-height: 1.6;
-  color: var(--pg-fg-faint); text-align: center;
+  color: var(--pg-fg-faint);
 }
 .pg-caption strong { color: var(--pg-fg-soft); }
 

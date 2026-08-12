@@ -27,7 +27,7 @@
 <!-- ============================= HERO ============================= -->
 <section class="section pg-hero" id="top">
   <div class="container is-max-desktop has-text-centered">
-    <h1 class="title is-2 pg-title">PropGesture: Few-shot Co-speech Gesture Synthesis for Handheld Props</h1>
+    <h1 class="title is-2 pg-title">PropGesture: Few-shot Co-speech Gesture Synthesis<br>for Handheld Props</h1>
     <p class="pg-venue">Computer Graphics Forum (Pacific Graphics 2026)</p>
 
     <div class="pg-authors">
@@ -75,9 +75,9 @@
 <section class="pg-section pg-statement-section">
   <div class="container is-max-desktop">
     <p class="pg-statement">
-      A held prop reshapes the motion of the <strong>holding arm</strong>, while the speech&ndash;gesture process
-      driving the rest of the body stays intact. So adaptation should be <strong>localized to that arm</strong> -
-      not spread across the whole model.
+      A held prop reshapes the motion of the <strong>holding arm</strong>, while the speech-gesture process
+      driving the rest of the body stays intact. Adaptation should therefore be
+      <strong>localized to that arm</strong> rather than spread across the whole model.
     </p>
   </div>
 </section> -->
@@ -98,7 +98,7 @@
         to a target prop using a small set of example clips synthesized by a video generation model. Our key design is
         to localize object adaptation to the prop-holding arm, preserving gesture diversity while introducing
         object-specific dynamics locally. Specifically, a phase-based arm motion generator, pretrained on large-scale
-        gesture data and fine-tuned on the example clips, resolves the many-to-many speech&ndash;gesture ambiguity
+        gesture data and fine-tuned on the example clips, resolves the many-to-many speech-gesture ambiguity
         through phase sampling and retrieves arm motion via motion matching. This arm motion is then inpainted into a
         pretrained gesture flow matching model that synthesizes the remaining body from speech. We demonstrate the
         effectiveness of our method through both perceptual and quantitative comparisons against motion-example-based
@@ -121,7 +121,7 @@
         Our framework builds on two pretrained components: a
         part-disentangled gesture latent flow matching model that generates full-body motion as four part-wise latent
         tokens (lower body, spine, left arm, right arm) from speech, and an audio-conditioned phase generator for the
-        prop-holding arm. To adapt to a new prop, we synthesize 10&ndash;15 video clips with a video generation model
+        prop-holding arm. To adapt to a new prop, we synthesize 10 to 15 video clips with a video generation model
         and lift them to SMPL-X motion, then fine-tune the phase generator on this few-shot data.
       </figcaption>
     </figure>
@@ -131,10 +131,10 @@
       <p>
         Our strategy generates prop-holding arm motion from speech, which presupposes that the two stay coupled even
         when the hand is occupied. Spearman correlations between nine acoustic features and right-arm joint velocities
-        over 200&nbsp;ms chunks confirm statistically significant coupling for every prop (BH&ndash;FDR
-        <em>q</em>&nbsp;&lt;&nbsp;0.05). But its strength, sign, and active subset vary substantially across props
-        - from broad positive coupling for the pipe to weak, partially negative coupling for the dumbbell -
-        which is why a single prop-agnostic generator will not do, and per-prop adaptation is needed.
+        over 200&nbsp;ms chunks confirm statistically significant coupling for every prop (BH-FDR
+        <em>q</em>&nbsp;&lt;&nbsp;0.05). Its strength, sign, and active subset nonetheless vary substantially across
+        props. Coupling is broadly positive for the pipe, but weak and partially negative for the dumbbell. A single
+        prop-agnostic generator therefore cannot capture this variation, so we adapt the generator to each prop.
       </p>
     </div>
 
@@ -188,7 +188,7 @@
       </p>
       <p class="pg-hint">
         <svg class="pg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-        All videos are muted by default - click the speaker icon on any panel to hear its speech.
+        All videos are muted by default. Click the speaker icon on any panel to hear its speech.
       </p>
     </div>
 
@@ -266,7 +266,7 @@
       <p class="pg-group-desc">
         <strong>Ours&#8209;DFT</strong> removes arm-localized adaptation and directly fine-tunes the full-body gesture
         latent model on the few-shot clips; <strong>Ours&#8209;LoRA</strong> instead applies LoRA to that same model.
-        Adapting the whole body at once forces the few prop clips to compete with the model's body-wide speech&ndash;gesture
+        Adapting the whole body at once forces the few prop clips to compete with the model's body-wide speech-gesture
         prior: Ours&#8209;DFT overfits and collapses onto a few repetitive patterns, while Ours&#8209;LoRA preserves
         diversity but cannot reshape the holding arm enough, leaving its prop-specific motion unstable.
       </p>
@@ -280,8 +280,8 @@
       <p class="pg-group-desc">
         <strong>Ours&#8209;AM</strong> replaces the phase generator with motion matching driven directly by the nine
         acoustic features, leaving everything else unchanged. Unlike the motion-intrinsic phase, acoustic features
-        carry no pose information, so acoustically similar frames may be kinematically distant - producing abrupt
-        transitions in the prop-holding arm.
+        carry no pose information, so acoustically similar frames may be kinematically distant. Retrieval then jumps
+        between unrelated poses, producing abrupt transitions in the prop-holding arm.
       </p>
       <div class="pg-chips" data-chips="am"></div>
       <div class="pg-grid pg-grid-2" data-grid="am"></div>
@@ -293,8 +293,8 @@
       <p class="pg-group-desc">
         The frozen flow matching model synthesizes the remaining body coherently with the inpainted arm, but that
         coherence does not enforce collision-free geometry. Our two-stage latent optimization corrects the right arm
-        and then the left arm in noise space, resolving body&ndash;prop interpenetration while preserving the overall
-        gesture - reducing interpenetration volume from 67.0 to 0.9&nbsp;cm<sup>3</sup>.
+        and then the left arm in noise space, resolving body-prop interpenetration while preserving the overall
+        gesture. Interpenetration volume drops from 67.0 to 0.9&nbsp;cm<sup>3</sup>.
       </p>
       <div class="pg-grid pg-grid-3" data-grid="dno"></div>
     </div>
