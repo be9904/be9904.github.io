@@ -30,14 +30,15 @@ a:hover { color: #1b47ab; }
 
 /* --------------------------------------------------------------- hero ---- */
 .pg-hero { padding: 3.5rem 1.5rem 1.5rem; }
+/* Sits between the title (2.5rem) and the author list (1.05rem). */
 .pg-venue {
-  font-size: 0.85rem; font-weight: 600; letter-spacing: 0.02em;
-  color: var(--pg-accent); margin-bottom: 1rem;
+  font-size: 1.35rem; font-weight: 600; letter-spacing: 0.01em;
+  color: var(--pg-accent); margin-bottom: 1.5rem;
 }
 .pg-title {
   font-family: "Google Sans", "Noto Sans", sans-serif;
   font-weight: 700; letter-spacing: -0.02em; line-height: 1.2;
-  color: var(--pg-fg); margin-bottom: 1.5rem !important;
+  color: var(--pg-fg); margin-bottom: 0.75rem !important;
 }
 .pg-authors {
   display: flex; flex-wrap: wrap; justify-content: center; gap: 0.25rem 1.25rem;
@@ -92,7 +93,7 @@ a:hover { color: #1b47ab; }
 .pg-prose { color: var(--pg-fg-soft); line-height: 1.75; font-size: 1.0rem; }
 .pg-prose p + p { margin-top: 0.9rem; }
 .pg-prose strong { color: var(--pg-fg); }
-.pg-intro { max-width: 860px; margin: 0 auto 1.75rem; text-align: center; }
+.pg-intro { margin: 0 auto 1.75rem; text-align: center; }
 .pg-statement {
   font-size: 1.22rem; line-height: 1.65; text-align: center;
   color: var(--pg-fg-soft); max-width: 780px; margin: 0 auto;
@@ -114,7 +115,7 @@ a:hover { color: #1b47ab; }
 }
 .pg-caption {
   margin-top: 0.75rem; font-size: 0.88rem; line-height: 1.6;
-  color: var(--pg-fg-faint); text-align: center; max-width: 900px; margin-inline: auto;
+  color: var(--pg-fg-faint); text-align: center;
 }
 .pg-caption strong { color: var(--pg-fg-soft); }
 
@@ -162,7 +163,7 @@ a:hover { color: #1b47ab; }
 /* --------------------------------------------------------------- grid ---- */
 .pg-grid { display: grid; gap: 0.9rem; }
 .pg-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.pg-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 900px; margin-inline: auto; }
+.pg-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (max-width: 900px) { .pg-grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 600px) { .pg-grid-3, .pg-grid-2 { grid-template-columns: 1fr; } }
 
@@ -186,7 +187,7 @@ a:hover { color: #1b47ab; }
 .pg-group:last-child { margin-bottom: 0; }
 .pg-group-desc {
   color: var(--pg-fg-soft); font-size: 0.95rem; line-height: 1.7;
-  max-width: 860px; margin-bottom: 1.1rem;
+  margin-bottom: 1.1rem;
 }
 .pg-carousel { position: relative; }
 .pg-carousel-viewport { overflow: hidden; border-radius: var(--pg-radius); }
