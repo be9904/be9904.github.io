@@ -30,28 +30,32 @@ a:hover { color: #1b47ab; }
 
 /* --------------------------------------------------------------- hero ---- */
 .pg-hero { padding: 3.5rem 1.5rem 1.5rem; }
-/* Sits between the title (2.5rem) and the author list (1.05rem). */
+/* Sits between the title (2.75rem) and the author list (1.35rem). */
 .pg-venue {
-  font-size: 1.35rem; font-weight: 600; letter-spacing: 0.01em;
-  color: var(--pg-accent); margin-bottom: 1.5rem;
+  font-size: 1.65rem; font-weight: 600; letter-spacing: 0.01em;
+  color: var(--pg-accent); margin-bottom: 1rem;
 }
-.pg-title {
+/* Two classes, so this beats Bulma's own `.title.is-2 { font-size: 2.5rem }`.
+   The clamp keeps 2.75rem on desktop and scales down rather than overflowing
+   on narrow screens. */
+.title.pg-title {
   font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: clamp(2rem, 4.6vw, 2.75rem);
   font-weight: 700; letter-spacing: -0.02em; line-height: 1.2;
-  color: var(--pg-fg); margin-bottom: 0.75rem !important;
+  color: var(--pg-fg); margin-bottom: 1rem !important;
 }
 .pg-authors {
   display: flex; flex-wrap: wrap; justify-content: center; gap: 0.25rem 1.25rem;
-  font-size: 1.05rem; margin-bottom: 0.6rem;
+  font-size: 1.35rem; margin-bottom: 0.6rem;
 }
 .pg-author { color: var(--pg-fg); }
 .pg-author sup { color: var(--pg-fg-faint); font-size: 0.7em; }
 .pg-affil {
   display: flex; flex-wrap: wrap; justify-content: center; gap: 0.15rem 1.25rem;
-  color: var(--pg-fg-soft); font-size: 0.92rem;
+  color: var(--pg-fg-soft); font-size: 1.35rem;
 }
 .pg-affil sup { font-size: 0.7em; }
-.pg-equal { margin-top: 0.35rem; font-size: 0.85rem; color: var(--pg-fg-faint); }
+.pg-equal { margin-top: 0.35rem; font-size: 1rem; color: var(--pg-fg-faint); }
 
 .pg-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin-top: 1.75rem; }
 .pg-btn {
