@@ -2,7 +2,7 @@
 
 #####  <p align="center"> [Jiho Kang*](https://dk-jang.github.io), [Junghoon Choi*](https://linkedin.com/in/dongseok-yang-868045203), [Jihun Shin](https://linkedin.com/in/deok-yun-jang-a2851b161), and [Sung-Hee Lee](https://lava.kaist.ac.kr/?page_id=41)</p>
  
-#### <p align="center">[Project Page](https://be9904.github.io/propgesture/) | [Demo video](https://youtu.be/m58sP5k4aIM)</p>
+#### <p align="center">[Project Page](https://be9904.github.io/propgesture/) | Demo video</p>
 
 <p align="center">
     <img src="img/teaser.png" align="center">
