@@ -7,7 +7,6 @@
 
 :root {
   --px: 4;                       /* virtual-pixel size, written by script.js */
-  --pan: 0px;                    /* background parallax offset, ditto        */
 
   --font-display: 'Press Start 2P', 'Courier New', monospace;
   --ink: #fdf6ff;
@@ -79,17 +78,10 @@ body {
 
 /* ---------------------------------------------------------- backgrounds -- */
 
-/* PLACEHOLDERS. The real art isn't generated yet, so each scene is a gradient
-   in roughly the palette the plan calls for. To swap one in later, replace the
-   `background` of the matching .bg--* rule with `url(img/bg/<name>.webp)` at
-   `background-size: cover` - nothing in script.js needs to change. */
 .bg {
   position: absolute;
   inset: 0;
   opacity: 0;
-  background-repeat: repeat-x;
-  background-size: 480px 160px;        /* 2x world width, so it can pan */
-  background-position-x: var(--pan);
   will-change: opacity;
 }
 
@@ -118,51 +110,8 @@ body {
 }
 
 .fg--intro { background-image: url('./img/intro_grass.png'); }
-.fg--korea-back { background-image: url('./img/korea_fg.png'); }
-.bg--china  { background-image: url('./img/china.png'); }
-.bg--taiwan { background-image: url('./img/taiwan.png'); }
-.bg--cambodia { background-image: url('./img/cambodia.png'); }
-.bg--korea  { background-image: url('./img/korea_elementary.png'); }
-.bg--korea-back { background-image: url('./img/korea.png'); }
-
-.bg--gameworld {
-  background-image:
-    linear-gradient(transparent 77.5%, #6b4ea8 77.5%, #4a3480 100%),
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, .06) 0 1px, transparent 1px 8px),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, .06) 0 1px, transparent 1px 8px),
-    linear-gradient(#2a1f52 0%, #6a3f96 55%, #c470b4 100%);
-  background-size: 480px 160px, 480px 160px, 480px 160px, 480px 160px;
-}
-
-.bg--coffee {
-  background-image:
-    linear-gradient(transparent 77.5%, #6b4430 77.5%, #4a2d20 100%),
-    repeating-linear-gradient(90deg, #8a5a3c 0 60px, #7d5136 60px 120px),
-    linear-gradient(#f6dcb8 0%, #e8b887 45%, #c88a5c 100%);
-  background-size: 480px 160px, 480px 160px, 480px 160px;
-}
-
-.bg--futurelab {
-  background-image:
-    linear-gradient(transparent 77.5%, #13203a 77.5%, #0a1326 100%),
-    repeating-linear-gradient(90deg, rgba(90, 230, 255, .18) 0 2px, transparent 2px 32px),
-    linear-gradient(#050a18 0%, #0e2340 55%, #1b3f63 100%);
-  background-size: 480px 160px, 480px 160px, 480px 160px;
-}
-
-/* Shared ground strip, so the character has a consistent line to run on
-   across every scene. Delete once the backgrounds bake in their own. */
-.ground {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 124px;
-  height: 36px;
-  background-image: repeating-linear-gradient(90deg,
-      rgba(0, 0, 0, .16) 0 2px, transparent 2px 16px);
-  background-position-x: var(--pan);
-  border-top: 1px solid rgba(0, 0, 0, .28);
-}
+/* The other scenes' paintings (and Back to Korea's foreground) are set from
+   their data-src by script.js, one at a time in story order, after the intro. */
 
 /* ----------------------------------------------------------- character --- */
 
@@ -170,16 +119,16 @@ body {
   position: absolute;
   left: 0;
   top: 0;                         /* position comes from --x / --y below */
-  width: 26px;
+  width: 32px;
   height: 26px;
   background-image: url('./img/kirby_anim.png');
   background-repeat: no-repeat;
-  background-size: 260px 130px;   /* 10 cols x 26px, 5 rows x 26px */
+  background-size: 608px 182px;   /* 19 cols x 32px, 7 rows x 26px */
   image-rendering: pixelated;
   /* script.js writes transform (position, facing, KIRBY_SCALE) and
      background-position (frame). Scaling pivots on the feet, so shrinking the
      sprite never lifts it off the ground. */
-  transform-origin: 13px 26px;
+  transform-origin: 16px 26px;
   will-change: transform, background-position;
 }
 
@@ -208,7 +157,7 @@ body {
 .caption {
   grid-area: 1 / 1;              /* every line in the same cell: no jumping */
   margin: 0;
-  text-align: center;
+  text-align: left;
   opacity: 0;
   will-change: opacity;
 }
@@ -222,8 +171,16 @@ body {
 }
 
 .caption p {
-  margin: 0 auto;
-  max-width: 92%;
+  margin: 0;
+  /* Justified so every full line ends flush with the screen's right edge.
+     The slack is shared between letters as well as words, so no gap opens up
+     wide. Words are never hyphenated, only wrapped whole; the last line stays
+     ragged. */
+  text-align: justify;
+  text-align-last: left;
+  text-justify: inter-character;
+  hyphens: none;
+  -webkit-hyphens: none;
   font-size: max(10px, calc(var(--px) * 3px));
   line-height: 2;
   color: var(--ink-dim);
@@ -242,6 +199,33 @@ body {
   opacity: 0;
   background: #000;
   pointer-events: none;
+}
+
+/* The start card: the intro, dimmed, under the title and a Start button.
+   Fades away once pressed. */
+.start {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--px) * 8px);
+  background: rgba(10, 4, 20, .55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .6s;
+}
+
+.start.is-on { opacity: 1; pointer-events: auto; }
+
+.start p {
+  margin: 0;
+  font-size: calc(var(--px) * 6px);
+  line-height: 1.6;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 calc(var(--px) * 4px) rgba(255, 150, 220, .8);
 }
 
 /* Only clickable once the ending is actually on screen. */
@@ -278,12 +262,24 @@ body {
   text-shadow: 0 0 calc(var(--px) * 4px) rgba(130, 200, 255, .7);
 }
 
+/* Small print in the ending card's bottom-right corner. */
+.ending .credit {
+  position: absolute;
+  right: calc(var(--px) * 4px);
+  bottom: calc(var(--px) * 4px);
+  max-width: 60%;
+  font-size: max(8px, calc(var(--px) * 2px));
+  line-height: 1.8;
+  text-align: right;
+  color: #8a8a8a;
+}
+
 /* ---------------------------------------------------------------- HUD ---- */
 
 .hint {
   position: absolute;
   left: 50%;
-  bottom: calc(var(--px) * 24px);   /* clear of the water along the intro's bottom edge */
+  bottom: calc(var(--px) * 16px);   /* on the intro's dirt band: below Kirby, above the water */
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;

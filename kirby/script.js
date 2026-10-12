@@ -25,17 +25,21 @@
   var NARR_H = 34;                 // narration band under the screen, same units
 
   /* ----- the sprite sheet ------------------------------------------------ */
-  /* img/kirby_anim.png is a 26x22 cell grid lifted from the sheet:
+  /* img/kirby_anim.png is a 32x26 cell grid lifted from the sheet:
        row 0 - idle, 2 frames  (line 1: stand + blink)
        row 1 - walk, 10 frames (line 5)
        row 2 - run,  8 frames  (line 6, frames 0-7; 8-10 are the skid-stop)
        row 3 - jump, 10 frames (line 4: 0 takeoff, 1-5 somersault, 6 coming
                                 out of it, 7-8 falling, 9 landing squash)
        row 4 - puff, 8 frames  (line 8: inhaled and floating; the double jump)
-     Cells are 26px tall so the puffed-up frames fit; everything is
-     bottom-aligned, so the feet sit on the cell's bottom row in every frame. */
+       row 5 - float, 19 frames (line 12: turning to the camera, then spinning)
+       row 6 - stretch, 9 frames (line 24: squashing flat and springing up)
+     Cells are 26px tall so the puffed-up frames fit, and 32px wide so the
+     flattest squash does; everything is centred across, and everything but the spin
+     is bottom-aligned, so the feet sit on the cell's bottom row in every
+     frame. The spin is centred in its cells, so it turns about its middle. */
 
-  var CELL_W = 26, CELL_H = 26;
+  var CELL_W = 32, CELL_H = 26;
   var KIRBY_SCALE = 0.5;           // drawn size relative to the source sprite
   var HALF_W = 10 * KIRBY_SCALE;   // half the body's width (body is ~20px of 26)
 
@@ -52,6 +56,29 @@
   var BLINK_LENGTH = 150;          // ms the eyes stay shut
   var LAND_MS = 90;                // how long the landing squash is held
   var FALL_FLAP_MS = 90;           // frame time of the falling arm-flap
+
+  /* The stretch, in the intro: line 24, played once when Kirby first walks
+     into the middle of the scene. The narration waits for it, fades in as it
+     starts and stays up. Kirby comes out of it standing still. [frame, ms] */
+  var STRETCH_ROW = 6;
+  var STRETCH_X = 120;             // the middle of the screen
+  var STRETCH = [
+    [0, 160], [1, 160], [2, 130], [3, 170], [4, 130], [5, 170], [6, 130],
+    [7, 200], [8, 450]
+  ];
+  var CAPTION_FADE_MS = 700;
+
+  /* The float-away, in the last scene: line 12 (Kirby turns to the camera
+     and tumbles round and round). Once Kirby is FLOAT_AT of the way across,
+     it lifts off and drifts up and away off the top of the screen, spinning,
+     and the story ends. Row 5, centred in its cells since it spins. */
+  var FLOAT_ROW = 5;
+  var FLOAT_AT = 0.75;             // fraction of the way across the scene
+  var FLOAT_MS = 3200;             // lift-off to gone
+  var FLOAT_DRIFT = 40;            // px it drifts right on the way up
+  var FLOAT_TOP = -24;             // feet height at the end: well off the top
+  var FLOAT_INTRO = [[0, 140], [1, 160]];   // turning to the camera [frame, ms]
+  var SPIN_FIRST = 2, SPIN_LAST = 16, SPIN_MS = 75;   // then this, looped
 
   /* ----- motion ---------------------------------------------------------- */
 
@@ -97,19 +124,8 @@
      enterFwd / enterBack  where a scene transition walks the character to
             when arriving from the left / from the right. */
 
-  var GROUND_Y = 124;              // the placeholder scenes' ground line
   var LEFT_EDGE = 14;
   var RIGHT_EDGE = VW - 14;
-
-  function flat() {
-    return {
-      segs: [[[LEFT_EDGE, GROUND_Y], [RIGHT_EDGE, GROUND_Y]]],
-      jumps: [],
-      enterFwd: LEFT_EDGE + 30,
-      enterBack: RIGHT_EDGE - 30,
-      ground: true                 // show the placeholder ground strip
-    };
-  }
 
   /* img/china.png, measured off the 2528x1696 source and scaled to 240x160:
        left pagoda ledge   x   0-45   top 69.3
@@ -135,8 +151,7 @@
         multiBack: { along: 10, puffs: 2, bump: 0.5, floaty: 1 } }
     ],
     enterFwd: 18,
-    enterBack: 212,
-    ground: false
+    enterBack: 212
   };
 
   /* img/taiwan.png, same scaling:
@@ -155,25 +170,25 @@
       { land: 160, landBack: 128, rise: 14 }
     ],
     enterFwd: 20,
-    enterBack: RIGHT_EDGE - 30,
-    ground: false
+    enterBack: RIGHT_EDGE - 30
   };
 
   /* img/intro.png: walking IN the grass. Its front row of blades (tips ~123,
      cut out as img/intro_grass.png and drawn over the character) hides the
      feet, so 125 puts them just down among the blade tips.
-     img/korea_elementary.png: the dirt strip between the two grass bands in
-     front of the school gate. Both are straight walks, no jumps. */
+     The last scene ("Now...") reuses the same painting and grass. */
   function straight(y) {
     return {
       segs: [[[LEFT_EDGE, y], [RIGHT_EDGE, y]]],
       jumps: [],
       enterFwd: LEFT_EDGE + 30,
-      enterBack: RIGHT_EDGE - 30,
-      ground: false
+      enterBack: RIGHT_EDGE - 30
     };
   }
   var INTRO = straight(125);
+  INTRO.stretch = true;            // stretches mid-screen first (see STRETCH)
+  var NOW = straight(125);
+  NOW.floatAway = true;            // floats off three quarters of the way across (see FLOAT_AT)
 
   /* img/korea_elementary.png: starts up on the floating brick blocks.
        block 1 (leftmost)  x   0-22   top 61.6  (bottom 70.8)
@@ -203,26 +218,25 @@
         multiBack: { along: 15, puffs: 4, bump: 0.5, floaty: 1 } }
     ],
     enterFwd: 11,
-    enterBack: RIGHT_EDGE - 14,
-    ground: false
+    enterBack: RIGHT_EDGE - 14
   };
 
   /* img/cambodia.png: along the front, where the plaza floor meets the stone
      wall's cap, and over the lotus pond in the middle (its stone frame spans
-     x 74.5-165.5) with a DOUBLE jump: a hop from right at the pond's edge, then
-     Kirby puffs up mid-fall and floats the rest of the way across. */
+     x 74.5-165.5): a hop from right at the pond's edge, then three short puffs
+     across, each about a quarter of the way, never more than ~16px up. */
   var CAMBODIA = {
     segs: [
       [[LEFT_EDGE, 137.5], [72, 137.5]],
       [[170, 137.5], [RIGHT_EDGE, 137.5]]
     ],
     jumps: [
-      { land: 178, landBack: 64, rise: 14,
-        double: { span: 60, cut: 0.6, rise2: 12, floaty: 0.5 } }
+      { land: 178, landBack: 64,
+        multi: { points: [[98, 126, 10], [124, 123, 6], [150, 125, 6]], rise: 6, floaty: 0.7 },
+        multiBack: { points: [[144, 126, 10], [118, 123, 6], [92, 125, 6]], rise: 6, floaty: 0.7 } }
     ],
     enterFwd: LEFT_EDGE + 30,
-    enterBack: RIGHT_EDGE - 30,
-    ground: false
+    enterBack: RIGHT_EDGE - 30
   };
 
   /* img/korea.png ("Back to Korea"): starts up on the second-level walkway in
@@ -243,14 +257,11 @@
         multiBack: { along: 22, puffs: 3, bump: 0.5, floaty: 1 } }
     ],
     enterFwd: 30,
-    enterBack: RIGHT_EDGE - 14,
-    ground: false
+    enterBack: RIGHT_EDGE - 14
   };
 
-  var COURSES = [INTRO, CHINA, TAIWAN, KOREA, CAMBODIA, KOREA_BACK, flat(), flat(), flat()];
+  var COURSES = [INTRO, CHINA, TAIWAN, KOREA, CAMBODIA, KOREA_BACK, NOW];
   var SCENES = COURSES.length;
-
-  var PAN = 24;                    // placeholder parallax across one scene
 
   // Just fully off-screen on each side, so walking off and walking in cover
   // the same distance in both directions.
@@ -288,9 +299,10 @@
 
   var root = document.documentElement;
   var kirby = document.getElementById('kirby');
-  var ground = document.getElementById('ground');
   var flash = document.getElementById('flash');
   var ending = document.getElementById('ending');
+  var startCard = document.getElementById('start');
+  var startBtn = document.getElementById('startBtn');
   var replayBtn = document.getElementById('replay');
   var hint = document.getElementById('hint');
   var fill = document.getElementById('progressFill');
@@ -331,7 +343,6 @@
 
   var impulse = 0;
   var lastScrollY = 0;
-  var scrolled = false;
 
   // A transition swallows the rest of the scroll gesture that triggered it:
   // trackpad momentum and a still-spinning wheel keep producing deltas for a
@@ -339,7 +350,8 @@
   // scene the moment control came back. Input counts again only once the
   // scroll has been quiet for QUIET_MS.
   var QUIET_MS = 200;
-  var lastInputAt = 0;
+  var HINT_IDLE_MS = 1500;         // the scroll hint comes back after this long without input
+  var lastInputAt = -Infinity;
   var swallowing = false;
 
   function scrollLimit() {
@@ -358,7 +370,6 @@
     lastScrollY = y;
     if (d === 0) return;           // our own recentre: not input
     impulse += d;
-    scrolled = true;
   }
 
   /* ----- state ----------------------------------------------------------- */
@@ -374,7 +385,14 @@
   var anim = IDLE;
   var landUntil = 0;               // hold the landing squash until this time
 
-  var phase = 'travel';            // 'travel' | 'jump' | 'transition' | 'ended'
+  var phase = 'title';             // 'title' | 'travel' | 'jump' | 'stretch' | 'float' | 'transition' | 'ended'
+
+  // stretch bookkeeping: once per play-through
+  var stretchT = 0;
+  var stretchedAt = null;          // when it started (the intro caption fades in from here)
+
+  // float-away bookkeeping
+  var floatT = 0, floatX0 = 0, floatY0 = 0;
 
   // jump bookkeeping: x is linear in u, y is the parabola apexY + jA(u - jU)^2
   var jT = 0, jDur = 0, jDir = 1, jToSeg = 0;
@@ -432,7 +450,13 @@
 
   function drawSprite(now) {
     var row, frame;
-    if (phase === 'jump' && jStage === 2) {
+    if (phase === 'stretch') {
+      row = STRETCH_ROW;
+      frame = stretchStep()[0];
+    } else if (phase === 'float') {
+      row = FLOAT_ROW;
+      frame = floatFrame();
+    } else if (phase === 'jump' && jStage === 2) {
       row = PUFF_ROW;
       frame = Math.floor(jT / PUFF_MS) % PUFF_FRAMES;
     } else if (phase === 'jump') {
@@ -458,13 +482,19 @@
   function showScene(i) {
     for (var n = 0; n < SCENES; n++) bgs[n].style.opacity = n === i ? 1 : 0;
     fgs.forEach(function (el) { el.style.opacity = +el.dataset.scene === i ? 1 : 0; });
-    ground.style.opacity = COURSES[i].ground ? 1 : 0;
   }
 
-  function updateCaptions(frac, visible) {
+  function updateCaptions(frac, visible, now) {
     // Symmetric band: fades in off either edge and out towards either edge, so
     // it reads the same whether the scene was entered forwards or backwards.
     var a = visible ? smooth(frac / 0.14) * (1 - smooth((frac - 0.86) / 0.14)) : 0;
+    // The intro's line instead waits for the stretch, fades in as it starts
+    // and then stays up, only fading as Kirby walks off the right.
+    if (COURSES[scene].stretch) {
+      a = visible && stretchedAt !== null
+        ? smooth((now - stretchedAt) / CAPTION_FADE_MS) * (1 - smooth((frac - 0.86) / 0.14))
+        : 0;
+    }
     for (var n = 0; n < SCENES; n++) {
       caps[n].style.opacity = n === scene ? a : 0;
     }
@@ -597,6 +627,70 @@
     }
   }
 
+  /* ----- the stretch ---------------------------------------------------- */
+
+  // Scripted, like a jump: scroll can't cut it short. Kirby comes out of it
+  // standing, and the rest of the scroll that walked it there is swallowed
+  // like a transition's, so it doesn't run straight off afterwards.
+  function beginStretch(now) {
+    phase = 'stretch';
+    stretchT = 0;
+    stretchedAt = now;
+    swallowing = true;
+    accel = 0;
+    vel = 0;
+    impulse = 0;
+  }
+
+  function stretchStep() {
+    for (var i = 0, t = stretchT; i < STRETCH.length; i++) {
+      if (t < STRETCH[i][1]) return STRETCH[i];
+      t -= STRETCH[i][1];
+    }
+    return null;
+  }
+
+  function stepStretch(dt) {
+    stretchT += dt;
+    if (stretchStep()) return;
+    phase = 'travel';
+    impulse = 0;
+  }
+
+  /* ----- the float-away ------------------------------------------------ */
+
+  // Scripted, like a jump: scroll can't steer it. When Kirby is out of sight
+  // the ending plays, the same white-out a walk off the last scene gives.
+  function beginFloat() {
+    phase = 'float';
+    floatT = 0;
+    floatX0 = x;
+    floatY0 = y;
+    facing = 1;
+    accel = 0;
+    vel = 0;
+    impulse = 0;
+  }
+
+  function floatFrame() {
+    var t = floatT;
+    for (var i = 0; i < FLOAT_INTRO.length; i++) {
+      if (t < FLOAT_INTRO[i][1]) return FLOAT_INTRO[i][0];
+      t -= FLOAT_INTRO[i][1];
+    }
+    return SPIN_FIRST + Math.floor(t / SPIN_MS) % (SPIN_LAST - SPIN_FIRST + 1);
+  }
+
+  function stepFloat(dt) {
+    floatT += dt;
+    var u = clamp01(floatT / FLOAT_MS);
+    // Eases up off the ground like something lighter than air, then keeps
+    // rising; the drift to the right levels off as it goes.
+    x = floatX0 + FLOAT_DRIFT * (1 - (1 - u) * (1 - u));
+    y = floatY0 + (FLOAT_TOP - floatY0) * u * u;
+    if (u >= 1) beginTransition(1, null, { skipExit: true, park: true, showEnding: true });
+  }
+
   /* ----- the scripted scene transition ----------------------------------- */
 
   /* dir  +1 walks off the right and back in from the left (story advances)
@@ -682,12 +776,22 @@
     }
   }
 
+  // The start card's button (or any key) begins the story - and, being a
+  // real press, lets the music start with it.
+  function start() {
+    if (phase !== 'title') return;
+    phase = 'travel';
+    impulse = 0;
+    startCard.classList.remove('is-on');
+    tryPlay();
+  }
+
   function replay() {
     if (phase !== 'ended') return;
     // Already off the right edge, so there is nothing to walk off: flash, put
     // the first scene back up and walk in from the left as usual.
     beginTransition(1, 0, { skipExit: true, hideEnding: true });
-    scrolled = false;              // bring the "scroll to walk / run" hint back
+    stretchedAt = null;            // a fresh play-through stretches again
   }
 
   /* ----- main loop ------------------------------------------------------- */
@@ -723,6 +827,15 @@
       x += vel * f;
 
       var course = COURSES[scene], pts = course.segs[seg];
+      if (course.stretch && stretchedAt === null && x >= STRETCH_X) {
+        x = STRETCH_X;
+        beginStretch(now);
+      }
+      var floatX = LEFT_EDGE + FLOAT_AT * (RIGHT_EDGE - LEFT_EDGE);
+      if (course.floatAway && x >= floatX) {
+        x = floatX;
+        beginFloat();
+      }
       var last = course.segs.length - 1;
 
       if (x >= segEnd(pts)) {
@@ -736,11 +849,13 @@
         else if (scene === 0) { vel = 0; accel = 0; }   // nothing to rewind into
         else beginTransition(-1, scene - 1);
       }
-      if (phase === 'travel') y = heightAt(pts, x);   // follow stairs and slopes
+      if (phase === 'travel' || phase === 'stretch') y = heightAt(pts, x);   // follow stairs and slopes
 
     } else {
-      impulse = 0;                 // scroll can't steer a jump, a transition or the end
+      impulse = 0;                 // scroll can't steer a jump, the stretch, the float, a transition or the end
       if (phase === 'jump') stepJump(dt, now);
+      else if (phase === 'stretch') stepStretch(dt);
+      else if (phase === 'float') stepFloat(dt);
       else if (phase === 'transition') stepTransition(dt);
     }
 
@@ -766,10 +881,20 @@
       'scale(' + (facing * KIRBY_SCALE) + ',' + KIRBY_SCALE + ')';
 
     var frac = clamp01((x - LEFT_EDGE) / (RIGHT_EDGE - LEFT_EDGE));
-    root.style.setProperty('--pan', (-frac * PAN).toFixed(2) + 'px');
-    updateCaptions(frac, phase === 'travel' || phase === 'jump');
+    // The float drifts right, but the narration stays put until the white-out.
+    updateCaptions(phase === 'float' ? FLOAT_AT : frac,
+                   phase === 'travel' || phase === 'jump' || phase === 'stretch' ||
+                   phase === 'float', now);
     fill.style.width = (((scene + frac) / SCENES) * 100).toFixed(2) + '%';
-    hint.style.opacity = scrolled ? 0 : 1;
+    // The hint is up whenever the intro is waiting for input: not right after
+    // a scroll, and not mid-transition, except that coming into the intro it
+    // fades in with the scene as the white clears.
+    var hintOn = 0;
+    if (scene === 0 && now - lastInputAt > HINT_IDLE_MS) {
+      if (phase === 'travel') hintOn = 1;
+      else if (phase === 'transition' && tSwapped) hintOn = 1 - flash.style.opacity;
+    }
+    hint.style.opacity = hintOn;
 
     // Keep room to scroll in both directions, without ever blocking the page.
     // Runs in every phase: scroll events still arrive during a transition, and
@@ -783,16 +908,15 @@
 
   /* ----- music ---------------------------------------------------------- */
 
-  // `wanted` is the visitor's choice (on by default, remembered across visits);
-  // whether it is actually audible also depends on the browser letting it
+  // `wanted` is the visitor's choice for this visit: on every time the page
+  // opens, whatever was chosen last time. Whether it is actually audible also
+  // depends on the browser letting it
   // play, which needs a click, tap or key press first. The icon always shows
   // what you can actually hear.
   var bgm = document.getElementById('bgm');
   var soundBtn = document.getElementById('sound');
   var soundIcon = document.getElementById('soundIcon');
-  var MUSIC_KEY = 'kirby-music';
   var wanted = true;
-  try { wanted = localStorage.getItem(MUSIC_KEY) !== 'off'; } catch (e) {}
   bgm.volume = 0.5;
 
   function showSound() {
@@ -806,11 +930,11 @@
     if (!wanted || !bgm.paused) return;
     var p = bgm.play();
     if (p && p.catch) p.catch(function () {});   // blocked until a gesture
+    return p;
   }
 
   function setWanted(v) {
     wanted = v;
-    try { localStorage.setItem(MUSIC_KEY, v ? 'on' : 'off'); } catch (e) {}
     if (v) tryPlay(); else bgm.pause();
   }
 
@@ -829,6 +953,34 @@
     }, { passive: true });
   });
 
+  /* ----- image loading -------------------------------------------------- */
+
+  // The intro painting is preloaded at high priority from <head>. Once it is
+  // in, the rest are fetched strictly one after another in story order (the
+  // order of the data-src elements in the page), so the next scene's image is
+  // never competing with ones further along, wherever the visitor is. Each is
+  // only applied once fully loaded, so a scene never paints in half-way.
+  var pending = [].slice.call(document.querySelectorAll('[data-src]'));
+
+  function loadNext() {
+    var el = pending.shift();
+    if (!el) return;
+    var src = el.dataset.src;
+    var img = new Image();
+    img.onload = function () {
+      el.style.backgroundImage = 'url("' + src + '")';
+      loadNext();
+    };
+    img.onerror = loadNext;
+    img.src = src;
+  }
+
+  function loadImages() {
+    var first = new Image();
+    first.onload = first.onerror = loadNext;
+    first.src = './img/intro.png';
+  }
+
   /* ----- go -------------------------------------------------------------- */
 
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
@@ -836,11 +988,19 @@
   window.addEventListener('resize', resize);
   window.addEventListener('scroll', onScroll, { passive: true });
   replayBtn.addEventListener('click', replay);
+  startBtn.addEventListener('click', start);
+  window.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') start();
+  });
 
   resize();
+  loadImages();
   showScene(0);
   showSound();
-  tryPlay();                       // works straight away if the browser allows
+  // Some browsers allow sound straight away (e.g. on a site visited often).
+  // Then there's nothing to wait for, so skip the start card.
+  var auto = tryPlay();
+  if (auto && auto.then) auto.then(start, function () {});
   recentre();
   requestAnimationFrame(frame);
 })();

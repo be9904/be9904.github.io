@@ -15,6 +15,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
+  <!-- The intro painting is the first thing on screen, so it jumps the queue.
+       Every other scene image is fetched one at a time, in story order, by
+       script.js once this one is in (see data-src below). -->
+  <link rel="preload" as="image" href="./img/intro.png" fetchpriority="high">
+  <link rel="preload" as="image" href="./img/intro_grass.png">
+  <link rel="preload" as="image" href="./img/kirby_anim.png">
+
   <link rel="stylesheet" href="./style.css">
 </head>
 
@@ -39,24 +46,20 @@
           <!-- One background per scene, in story order - script.js indexes these
                against COURSES and the narration lines below. Only one is ever
                visible: the swap happens under the white flash, so they never
-               cross-dissolve. The gradients are placeholders; the .bg--art ones
-               are the real paintings. -->
-          <div class="bg bg--art bg--intro"      data-scene="0"></div>
-          <div class="bg bg--art bg--china"      data-scene="1"></div>
-          <div class="bg bg--art bg--taiwan"     data-scene="2"></div>
-          <div class="bg bg--art bg--korea"      data-scene="3"></div>
-          <div class="bg bg--art bg--cambodia"   data-scene="4"></div>
-          <div class="bg bg--art bg--korea-back" data-scene="5"></div>
-          <div class="bg bg--gameworld"          data-scene="6"></div>
-          <div class="bg bg--coffee"             data-scene="7"></div>
-          <div class="bg bg--futurelab"          data-scene="8"></div>
+               cross-dissolve. The last scene ("Now...") reuses the intro's
+               painting. data-src images are loaded by script.js, in this
+               document order, one after another. -->
+          <div class="bg bg--art bg--intro" data-scene="0"></div>
+          <div class="bg bg--art" data-scene="1" data-src="./img/china.png"></div>
+          <div class="bg bg--art" data-scene="2" data-src="./img/taiwan.png"></div>
+          <div class="bg bg--art" data-scene="3" data-src="./img/korea_elementary.png"></div>
+          <div class="bg bg--art" data-scene="4" data-src="./img/cambodia.png"></div>
+          <div class="bg bg--art" data-scene="5" data-src="./img/korea.png"></div>
+          <div class="bg bg--art bg--intro" data-scene="6"></div>
 
-          <!-- Ground strip the character walks on. Also placeholder: once the
-               backgrounds bake their own ground line in, delete this. -->
-          <div class="ground" id="ground"></div>
-
-          <!-- Foreground character. img/kirby_anim.png is a 26x22 cell grid:
-               row 0 idle (2), row 1 walk (10), row 2 run (8), row 3 jump (10).
+          <!-- Foreground character. img/kirby_anim.png is a 32x26 cell grid:
+               row 0 idle (2), row 1 walk (10), row 2 run (8), row 3 jump (10),
+               row 4 puff (8), row 5 float-away spin (19), row 6 stretch (9).
                Drawn at KIRBY_SCALE (script.js), scaled about the feet. -->
           <div class="kirby" id="kirby"></div>
 
@@ -65,8 +68,17 @@
                background (the intro's front row of grass blades), so they line
                up exactly; script.js shows the one for the current scene. -->
           <div class="fg fg--intro" data-scene="0"></div>
+          <div class="fg fg--intro" data-scene="6"></div>
           <!-- Back to Korea: power poles, wires, the walkway railing, scooters -->
-          <div class="fg fg--korea-back" data-scene="5"></div>
+          <div class="fg" data-scene="5" data-src="./img/korea_fg.png"></div>
+        </div>
+
+        <!-- Start card. Browsers only let the music play after a click, tap or
+             key press (scrolling doesn't count), so the story opens on this
+             and the press that dismisses it starts the music with it. -->
+        <div class="start is-on" id="start">
+          <p>Adventure in Dream&nbsp;Land</p>
+          <button type="button" class="replay" id="startBtn" autofocus>Start</button>
         </div>
 
         <!-- Ending card. Sits *below* .flash so the final white-out reveals it
@@ -74,6 +86,9 @@
         <div class="ending" id="ending">
           <p>The End&hellip;?</p>
           <button type="button" class="replay" id="replay">Play again</button>
+          <small class="credit">All scene images were generated with generative AI.<br>
+            This site was also built with generative AI.<br>
+            All captions were written by a human.</small>
         </div>
 
         <!-- Thin HUD progress bar. Below .flash too, so it doesn't sit on top
@@ -85,7 +100,7 @@
 
         <!-- Scroll affordance, fades out on the first input. -->
         <div class="hint" id="hint">
-          <span>scroll to walk</span>
+          <span>scroll down to walk</span>
           <span>scroll faster to run</span>
           <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1l5 5 5-5" fill="none" stroke="currentColor"
               stroke-width="2" /></svg>
@@ -98,7 +113,7 @@
       <div class="narration" id="narration">
         <figure class="caption" data-scene="0">
           <h2>The Beginning</h2>
-          <p>My life has been an adventure from the very start. This is a story of my childhood, in different countries.</p>
+          <p>My life has been an adventure from the very start. This is a story of my childhood, in different countries, told through Kirby. <br>Kirby is my favorite character, and the first one that comes to mind when I think of adventures.</p>
         </figure>
         <figure class="caption" data-scene="1">
           <h2>China</h2>
@@ -114,23 +129,15 @@
         </figure>
         <figure class="caption" data-scene="4">
           <h2>Cambodia</h2>
-          <p>Daily life was tough here, since the infrastructure wasn't great. But I had learned to adapt to new surroundings, and I made many friends.</p>
+          <p>Daily life was tough here, since Cambodia was rather new compared to the other countries I lived in. But I had learned to adapt to new surroundings, and I made many friends.</p>
         </figure>
         <figure class="caption" data-scene="5">
           <h2>Back to Korea</h2>
-          <p></p>
+          <p>By the time I came back, I had grown used to so many different cultures that I'd become someone who can adapt to any new environment.</p>
         </figure>
         <figure class="caption" data-scene="6">
-          <h2>Worlds inside games</h2>
-          <p>I became fascinated by the worlds inside games, and by how their characters move.</p>
-        </figure>
-        <figure class="caption" data-scene="7">
-          <h2>A good cup</h2>
-          <p>Between studying and imagining new worlds, there's always time for a hand-dripped coffee.</p>
-        </figure>
-        <figure class="caption" data-scene="8">
-          <h2>The future</h2>
-          <p>I want to explore how digital characters can move naturally — and perhaps one day build robots of my own.</p>
+          <h2>Now&hellip;</h2>
+          <p>I'm still figuring out who I am after living in all those cultures. But looking back, I'm grateful for the life I've had and all the memories it gave me. Now I am excited to visit new countries and getting to know their culture in local neighborhoods.</p>
         </figure>
       </div>
 
