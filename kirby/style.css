@@ -280,12 +280,6 @@ body {
   color: #8a8a8a;
 }
 
-/* Rights and ownership: its own block under the AI note, a shade dimmer. */
-.ending .credit .rights {
-  display: block;
-  margin-top: calc(var(--px) * 2px);
-  color: #6e6e6e;
-}
 
 /* ---------------------------------------------------------------- HUD ---- */
 

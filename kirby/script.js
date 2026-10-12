@@ -347,9 +347,14 @@
   // A transition swallows the rest of the scroll gesture that triggered it:
   // trackpad momentum and a still-spinning wheel keep producing deltas for a
   // second or more, and without this they'd shove the character across the new
-  // scene the moment control came back. Input counts again only once the
-  // scroll has been quiet for QUIET_MS.
+  // scene the moment control came back. Input counts again once the scroll
+  // has been quiet for QUIET_MS - or, at the latest, SWALLOW_MAX_MS after
+  // control came back. Without that cap, scrolling that never pauses (a wheel
+  // kept spinning, or a trackpad's momentum) was swallowed indefinitely, and
+  // Kirby stood still until a click stopped the momentum.
   var QUIET_MS = 200;
+  var SWALLOW_MAX_MS = 500;
+  var swallowFrom = null;          // when control came back with swallowing on
   var HINT_IDLE_MS = 1500;         // the scroll hint comes back after this long without input
   var lastInputAt = -Infinity;
   var swallowing = false;
@@ -807,8 +812,13 @@
     // Timed on the frame clock, the same one everything else here runs on.
     if (impulse !== 0) lastInputAt = now;
     if (phase === 'travel' && swallowing) {
-      if (now - lastInputAt > QUIET_MS) swallowing = false;
-      else impulse = 0;            // still the gesture that started the transition
+      if (swallowFrom === null) swallowFrom = now;
+      if (now - lastInputAt > QUIET_MS || now - swallowFrom > SWALLOW_MAX_MS) {
+        swallowing = false;
+        swallowFrom = null;
+      } else {
+        impulse = 0;               // still the gesture that started the transition
+      }
     }
 
     if (phase === 'travel') {
