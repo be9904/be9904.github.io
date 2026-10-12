@@ -890,7 +890,7 @@
     // a scroll, and not mid-transition, except that coming into the intro it
     // fades in with the scene as the white clears.
     var hintOn = 0;
-    if (scene === 0 && now - lastInputAt > HINT_IDLE_MS) {
+    if (fontReady && scene === 0 && now - lastInputAt > HINT_IDLE_MS) {
       if (phase === 'travel') hintOn = 1;
       else if (phase === 'transition' && tSwapped) hintOn = 1 - flash.style.opacity;
     }
@@ -992,6 +992,32 @@
   window.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' || e.key === ' ') start();
   });
+
+  /* The hint waits for the pixel font. On a first visit the font arrives
+     from Google Fonts after the page is up; drawn before that, the hint's
+     animated, filtered text could be left mispositioned (off to the right)
+     when the font swapped in, until a refresh with the font cached. So it
+     only appears once fonts are settled, with its bob animation restarted
+     so it's laid out fresh in the final font. If the font never loads, it
+     still appears after FONT_WAIT_MS in the fallback. */
+  var fontReady = false;
+  var FONT_WAIT_MS = 3000;
+  function onFontReady() {
+    if (fontReady) return;
+    fontReady = true;
+    hint.style.animation = 'none';
+    void hint.offsetWidth;         // apply the 'none' before restoring it
+    hint.style.animation = '';
+  }
+  if (document.fonts && document.fonts.load) {
+    // (an empty result means the font's rules weren't in yet: wait for all fonts)
+    document.fonts.load('12px "Press Start 2P"').then(function (f) {
+      if (f.length) onFontReady(); else document.fonts.ready.then(onFontReady);
+    }, onFontReady);
+    setTimeout(onFontReady, FONT_WAIT_MS);
+  } else {
+    onFontReady();
+  }
 
   resize();
   loadImages();

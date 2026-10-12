@@ -46,9 +46,17 @@ Live page: <https://be9904.github.io/kirby/>
 - **The captions.** Every line of narration was written by me.
 - **The story.** The places, the order and what each one meant to me are my
   own experiences.
-- **Kirby's sprites** come from a sprite sheet ripped by A.J. Nitro. Kirby is
-  a character owned by Nintendo and HAL Laboratory.
+- **Kirby's sprites** come from the *Kirby: Nightmare in Dream Land* (Game Boy
+  Advance) sprite sheet ripped by A.J. Nitro, found on
+  [The Spriters Resource](https://www.spriters-resource.com/game_boy_advance/kirbynim/asset/32130/).
+  Kirby is a character owned by Nintendo and HAL Laboratory.
 - **The music** is "Vegetable Valley" from *Kirby: Squeak Squad*.
+
+Kirby, the Kirby sprites and the music are © Nintendo / HAL Laboratory, Inc.,
+who own all rights to them. This is a free, non-commercial fan project, not
+affiliated with or endorsed by Nintendo or HAL Laboratory. The Spriters
+Resource asks that sprites be used only in non-commercial projects and that the rights
+holder be credited.
 
 ## A personal note
 

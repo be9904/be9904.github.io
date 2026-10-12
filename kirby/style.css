@@ -263,15 +263,28 @@ body {
 }
 
 /* Small print in the ending card's bottom-right corner. */
+/* In the card's flow rather than pinned over its corner, so on a small screen
+   it pushes the title up instead of covering it: the title and the credit
+   both take an auto top margin, which centres the title and button in the
+   space left above the credit. */
+.ending { padding: calc(var(--px) * 4px); }
+.ending > p { margin-top: auto; }
+
 .ending .credit {
-  position: absolute;
-  right: calc(var(--px) * 4px);
-  bottom: calc(var(--px) * 4px);
-  max-width: 60%;
+  margin-top: auto;
+  align-self: flex-end;
+  max-width: 75%;
   font-size: max(8px, calc(var(--px) * 2px));
   line-height: 1.8;
   text-align: right;
   color: #8a8a8a;
+}
+
+/* Rights and ownership: its own block under the AI note, a shade dimmer. */
+.ending .credit .rights {
+  display: block;
+  margin-top: calc(var(--px) * 2px);
+  color: #6e6e6e;
 }
 
 /* ---------------------------------------------------------------- HUD ---- */
