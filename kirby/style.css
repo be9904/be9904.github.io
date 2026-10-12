@@ -1,0 +1,366 @@
+/* =========================================================================
+   Adventure in Dream Land
+   Everything inside .world is authored in 240x160 virtual pixels (the GBA
+   resolution, which is exactly 3:2). script.js scales that box up by --px
+   and the leftover viewport stays black, giving the letterboxed game look.
+   ========================================================================= */
+
+:root {
+  --px: 4;                       /* virtual-pixel size, written by script.js */
+  --pan: 0px;                    /* background parallax offset, ditto        */
+
+  --font-display: 'Press Start 2P', 'Courier New', monospace;
+  --ink: #fdf6ff;
+  --ink-dim: #c9b9d6;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: auto;
+  /* The scroll track exists only to collect input, so the bar itself is noise.
+     Hiding it does not affect scrollability. */
+  scrollbar-width: none;            /* Firefox */
+  -ms-overflow-style: none;         /* old Edge */
+}
+
+html::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+body {
+  margin: 0;
+  background: #000;
+  color: var(--ink);
+  font-family: var(--font-display);
+  overflow-x: hidden;            /* the adventure is vertical only */
+}
+
+/* ---------------------------------------------------------------- stage -- */
+
+/* The track exists only so there is always something to scroll. script.js
+   recentres the scroll position inside it, so it never hits an end. */
+.adventure { height: 300vh; position: relative; }
+
+/* Pinned viewport. Stays put while .adventure scrolls past it. */
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--px) * 5px);
+  background: #000;
+}
+
+/* The 3:2 screen. Exact pixel size is set by script.js so the scale can be
+   snapped to whole pixels; aspect-ratio here keeps it right before JS runs. */
+.screen {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  width: min(100vw, 150vh);
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 0 0 2px #15101c, 0 0 60px rgba(120, 80, 160, .25);
+}
+
+/* --------------------------------------------------------------- world --- */
+
+.world {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 160px;
+  transform: scale(var(--px));
+  transform-origin: top left;
+  image-rendering: pixelated;
+}
+
+/* ---------------------------------------------------------- backgrounds -- */
+
+/* PLACEHOLDERS. The real art isn't generated yet, so each scene is a gradient
+   in roughly the palette the plan calls for. To swap one in later, replace the
+   `background` of the matching .bg--* rule with `url(img/bg/<name>.webp)` at
+   `background-size: cover` - nothing in script.js needs to change. */
+.bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background-repeat: repeat-x;
+  background-size: 480px 160px;        /* 2x world width, so it can pan */
+  background-position-x: var(--pan);
+  will-change: opacity;
+}
+
+/* Real art. Fixed to the frame - no parallax pan - because script.js walks
+   the character over surfaces measured off these exact images (see COURSES).
+   Smooth sampling, since the sources are ~10x the world resolution and
+   nearest-neighbour downscaling them would shimmer. */
+.bg--art {
+  background-size: 240px 160px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  image-rendering: auto;
+}
+
+.bg--intro  { background-image: url('./img/intro.png'); }
+
+/* Foreground cut-outs: same frame and sampling as the paintings they come from. */
+.fg {
+  position: absolute;
+  inset: 0;
+  background-size: 240px 160px;
+  background-repeat: no-repeat;
+  image-rendering: auto;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.fg--intro { background-image: url('./img/intro_grass.png'); }
+.fg--korea-back { background-image: url('./img/korea_fg.png'); }
+.bg--china  { background-image: url('./img/china.png'); }
+.bg--taiwan { background-image: url('./img/taiwan.png'); }
+.bg--cambodia { background-image: url('./img/cambodia.png'); }
+.bg--korea  { background-image: url('./img/korea_elementary.png'); }
+.bg--korea-back { background-image: url('./img/korea.png'); }
+
+.bg--gameworld {
+  background-image:
+    linear-gradient(transparent 77.5%, #6b4ea8 77.5%, #4a3480 100%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .06) 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .06) 0 1px, transparent 1px 8px),
+    linear-gradient(#2a1f52 0%, #6a3f96 55%, #c470b4 100%);
+  background-size: 480px 160px, 480px 160px, 480px 160px, 480px 160px;
+}
+
+.bg--coffee {
+  background-image:
+    linear-gradient(transparent 77.5%, #6b4430 77.5%, #4a2d20 100%),
+    repeating-linear-gradient(90deg, #8a5a3c 0 60px, #7d5136 60px 120px),
+    linear-gradient(#f6dcb8 0%, #e8b887 45%, #c88a5c 100%);
+  background-size: 480px 160px, 480px 160px, 480px 160px;
+}
+
+.bg--futurelab {
+  background-image:
+    linear-gradient(transparent 77.5%, #13203a 77.5%, #0a1326 100%),
+    repeating-linear-gradient(90deg, rgba(90, 230, 255, .18) 0 2px, transparent 2px 32px),
+    linear-gradient(#050a18 0%, #0e2340 55%, #1b3f63 100%);
+  background-size: 480px 160px, 480px 160px, 480px 160px;
+}
+
+/* Shared ground strip, so the character has a consistent line to run on
+   across every scene. Delete once the backgrounds bake in their own. */
+.ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 124px;
+  height: 36px;
+  background-image: repeating-linear-gradient(90deg,
+      rgba(0, 0, 0, .16) 0 2px, transparent 2px 16px);
+  background-position-x: var(--pan);
+  border-top: 1px solid rgba(0, 0, 0, .28);
+}
+
+/* ----------------------------------------------------------- character --- */
+
+.kirby {
+  position: absolute;
+  left: 0;
+  top: 0;                         /* position comes from --x / --y below */
+  width: 26px;
+  height: 26px;
+  background-image: url('./img/kirby_anim.png');
+  background-repeat: no-repeat;
+  background-size: 260px 130px;   /* 10 cols x 26px, 5 rows x 26px */
+  image-rendering: pixelated;
+  /* script.js writes transform (position, facing, KIRBY_SCALE) and
+     background-position (frame). Scaling pivots on the feet, so shrinking the
+     sprite never lifts it off the ground. */
+  transform-origin: 13px 26px;
+  will-change: transform, background-position;
+}
+
+/* Scene-change white-out. Covers the world, the captions, the ending card and
+   the HUD, so the background swap underneath it is never visible. */
+.flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+/* ------------------------------------------------------------ captions --- */
+
+/* Below the screen, like a game's narration box. Sized from --px so it tracks
+   the screen, with a floor so it stays legible when the screen is small. */
+.narration {
+  display: grid;
+  width: calc(var(--px) * 240px);
+  max-width: calc(100vw - 32px);
+  pointer-events: none;
+}
+
+.caption {
+  grid-area: 1 / 1;              /* every line in the same cell: no jumping */
+  margin: 0;
+  text-align: center;
+  opacity: 0;
+  will-change: opacity;
+}
+
+.caption h2 {
+  margin: 0 0 calc(var(--px) * 2.5px);
+  font-size: max(12px, calc(var(--px) * 4.4px));
+  line-height: 1.4;
+  color: #ffd9f2;
+  font-weight: 400;
+}
+
+.caption p {
+  margin: 0 auto;
+  max-width: 92%;
+  font-size: max(10px, calc(var(--px) * 3px));
+  line-height: 2;
+  color: var(--ink-dim);
+}
+
+/* -------------------------------------------------------------- ending --- */
+
+.ending {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--px) * 8px);
+  opacity: 0;
+  background: #000;
+  pointer-events: none;
+}
+
+/* Only clickable once the ending is actually on screen. */
+.ending.is-on { pointer-events: auto; }
+
+.replay {
+  font-family: inherit;
+  font-size: calc(var(--px) * 3.4px);
+  line-height: 1;
+  color: #2a1030;
+  background: #ffd9f2;
+  border: 0;
+  padding: calc(var(--px) * 4px) calc(var(--px) * 6px);
+  box-shadow: 0 calc(var(--px) * 1px) 0 #c47fa8,
+              0 0 calc(var(--px) * 5px) rgba(255, 180, 230, .5);
+  cursor: pointer;
+}
+
+.replay:hover,
+.replay:focus-visible {
+  background: #fff;
+  outline: none;
+  transform: translateY(calc(var(--px) * -0.5px));
+}
+
+.replay:active { transform: translateY(calc(var(--px) * 0.5px)); box-shadow: none; }
+
+.ending p {
+  margin: 0;
+  font-size: calc(var(--px) * 6px);
+  line-height: 1.6;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 calc(var(--px) * 4px) rgba(130, 200, 255, .7);
+}
+
+/* ---------------------------------------------------------------- HUD ---- */
+
+.hint {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--px) * 24px);   /* clear of the water along the intro's bottom edge */
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--px) * 2px);
+  font-size: calc(var(--px) * 3px);
+  color: #fff;
+  /* hard 1-world-px outline, so it reads on bright art (the intro's yellow path) */
+  text-shadow:
+    calc(var(--px) * .5px) 0 0 #2a1030, calc(var(--px) * -.5px) 0 0 #2a1030,
+    0 calc(var(--px) * .5px) 0 #2a1030, 0 calc(var(--px) * -.5px) 0 #2a1030;
+  filter: drop-shadow(0 0 calc(var(--px) * 1px) rgba(42, 16, 48, .6));
+  pointer-events: none;
+  animation: bob 1.6s ease-in-out infinite;
+  transition: opacity .4s;
+}
+
+.hint span { white-space: nowrap; }
+.hint span + span { opacity: .75; }   /* the run tip is the secondary line */
+
+.hint svg { width: calc(var(--px) * 6px); display: block; }
+
+@keyframes bob {
+  0%, 100% { transform: translate(-50%, 0); }
+  50%      { transform: translate(-50%, calc(var(--px) * 1.5px)); }
+}
+
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--px) * 1px);
+  background: rgba(255, 255, 255, .12);
+}
+
+.progress i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: #ff8ed4;
+  box-shadow: 0 0 calc(var(--px) * 2px) #ff8ed4;
+}
+
+/* --------------------------------------------------------- sound toggle --- */
+
+/* Pinned to the viewport's top-right, on the black border. The source icons
+   are black pixel art; invert() turns them white without touching the files. */
+.sound {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  width: clamp(28px, 3.2vw, 44px);
+  height: clamp(28px, 3.2vw, 44px);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  opacity: .8;
+  transition: opacity .15s;
+}
+
+.sound:hover,
+.sound:focus-visible { opacity: 1; outline: none; }
+.sound:focus-visible { box-shadow: 0 0 0 2px #ff8ed4; }
+
+.sound img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: invert(1);
+  image-rendering: pixelated;
+}
+
+/* --------------------------------------------------------- reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+  .hint { animation: none; }
+}

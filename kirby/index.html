@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Adventure in Dream Land</title>
+  <meta name="description"
+    content="A scroll-controlled side-scrolling adventure through the places, games, and ideas that shaped me.">
+
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%AD%90%3C/text%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+  <!-- Scrolling is an *input*, not a timeline: the scroll delta is fed in as
+       acceleration and the character carries its own momentum. The track below
+       only exists to give the wheel/trackpad/keyboard something to scroll;
+       script.js recentres it so it never runs out. -->
+  <main class="adventure" id="adventure">
+    <div class="stage">
+
+      <!-- 3:2 game screen. Everything game-like is clipped to this box; the rest
+           of the viewport stays black (the "cabinet" borders). -->
+      <div class="screen" id="screen">
+
+        <!-- .world is a fixed 240x160 virtual-pixel canvas (the GBA resolution,
+             which is exactly 3:2). It is scaled up by --px in script.js, so every
+             child below can be authored in honest game pixels. -->
+        <div class="world" id="world">
+
+          <!-- One background per scene, in story order - script.js indexes these
+               against COURSES and the narration lines below. Only one is ever
+               visible: the swap happens under the white flash, so they never
+               cross-dissolve. The gradients are placeholders; the .bg--art ones
+               are the real paintings. -->
+          <div class="bg bg--art bg--intro"      data-scene="0"></div>
+          <div class="bg bg--art bg--china"      data-scene="1"></div>
+          <div class="bg bg--art bg--taiwan"     data-scene="2"></div>
+          <div class="bg bg--art bg--korea"      data-scene="3"></div>
+          <div class="bg bg--art bg--cambodia"   data-scene="4"></div>
+          <div class="bg bg--art bg--korea-back" data-scene="5"></div>
+          <div class="bg bg--gameworld"          data-scene="6"></div>
+          <div class="bg bg--coffee"             data-scene="7"></div>
+          <div class="bg bg--futurelab"          data-scene="8"></div>
+
+          <!-- Ground strip the character walks on. Also placeholder: once the
+               backgrounds bake their own ground line in, delete this. -->
+          <div class="ground" id="ground"></div>
+
+          <!-- Foreground character. img/kirby_anim.png is a 26x22 cell grid:
+               row 0 idle (2), row 1 walk (10), row 2 run (8), row 3 jump (10).
+               Drawn at KIRBY_SCALE (script.js), scaled about the feet. -->
+          <div class="kirby" id="kirby"></div>
+
+          <!-- Foreground layers, drawn OVER the character so it reads as walking
+               in the art rather than on top of it. Cut from the matching
+               background (the intro's front row of grass blades), so they line
+               up exactly; script.js shows the one for the current scene. -->
+          <div class="fg fg--intro" data-scene="0"></div>
+          <!-- Back to Korea: power poles, wires, the walkway railing, scooters -->
+          <div class="fg fg--korea-back" data-scene="5"></div>
+        </div>
+
+        <!-- Ending card. Sits *below* .flash so the final white-out reveals it
+             the same way it reveals each new background. -->
+        <div class="ending" id="ending">
+          <p>The End&hellip;?</p>
+          <button type="button" class="replay" id="replay">Play again</button>
+        </div>
+
+        <!-- Thin HUD progress bar. Below .flash too, so it doesn't sit on top
+             of a pure-white screen mid-transition. -->
+        <div class="progress"><i id="progressFill"></i></div>
+
+        <!-- Scene-change white-out. -->
+        <div class="flash" id="flash"></div>
+
+        <!-- Scroll affordance, fades out on the first input. -->
+        <div class="hint" id="hint">
+          <span>scroll to walk</span>
+          <span>scroll faster to run</span>
+          <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1l5 5 5-5" fill="none" stroke="currentColor"
+              stroke-width="2" /></svg>
+        </div>
+      </div>
+
+      <!-- Narration, under the screen rather than over the art. One line per
+           scene, all stacked in the same grid cell so the band is as tall as
+           the longest one and never jumps; script.js fades between them. -->
+      <div class="narration" id="narration">
+        <figure class="caption" data-scene="0">
+          <h2>The Beginning</h2>
+          <p>My life has been an adventure from the very start. This is a story of my childhood, in different countries.</p>
+        </figure>
+        <figure class="caption" data-scene="1">
+          <h2>China</h2>
+          <p>Life was hard in a country where I couldn't speak the language, so I went on adventures of my own, inside games. Kirby was the very first game I played, and it's been my favorite ever since.</p>
+        </figure>
+        <figure class="caption" data-scene="2">
+          <h2>Taiwan</h2>
+          <p>The language barrier was smaller here, and I came to enjoy the culture, especially the food. It was probably the first time I realized how much language matters, and how tightly it's woven into a country's culture.</p>
+        </figure>
+        <figure class="caption" data-scene="3">
+          <h2>Korea</h2>
+          <p>I finally came back to my home country, but I felt a little left out. By then, I'd grown used to foreign cultures.</p>
+        </figure>
+        <figure class="caption" data-scene="4">
+          <h2>Cambodia</h2>
+          <p>Daily life was tough here, since the infrastructure wasn't great. But I had learned to adapt to new surroundings, and I made many friends.</p>
+        </figure>
+        <figure class="caption" data-scene="5">
+          <h2>Back to Korea</h2>
+          <p></p>
+        </figure>
+        <figure class="caption" data-scene="6">
+          <h2>Worlds inside games</h2>
+          <p>I became fascinated by the worlds inside games, and by how their characters move.</p>
+        </figure>
+        <figure class="caption" data-scene="7">
+          <h2>A good cup</h2>
+          <p>Between studying and imagining new worlds, there's always time for a hand-dripped coffee.</p>
+        </figure>
+        <figure class="caption" data-scene="8">
+          <h2>The future</h2>
+          <p>I want to explore how digital characters can move naturally — and perhaps one day build robots of my own.</p>
+        </figure>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Background music. Browsers only allow audio after a click, tap or key
+       press (scrolling doesn't count), so script.js starts it on the first
+       one and the icon shows muted until it is actually playing. -->
+  <audio id="bgm" src="./audio/KSqS_Vegetable_Valley.mp3" loop preload="auto"></audio>
+  <button type="button" class="sound" id="sound" aria-pressed="false" aria-label="Unmute music">
+    <img src="./img/volume_muted.png" alt="" id="soundIcon">
+  </button>
+
+  <script src="./script.js"></script>
+</body>
+
+</html>
