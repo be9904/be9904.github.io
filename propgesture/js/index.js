@@ -494,9 +494,32 @@
     return b;
   }
 
+  /* ------------------------------------------- related publications ---- */
+
+  function initWorks() {
+    var root = document.getElementById('pg-works');
+    if (!root) return;
+    var btn = root.querySelector('.pg-works-btn');
+
+    function set(open) {
+      root.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    btn.addEventListener('click', function () { set(!root.classList.contains('is-open')); });
+    // Close on a click anywhere else, or Escape.
+    document.addEventListener('click', function (e) {
+      if (!root.contains(e.target)) set(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && root.classList.contains('is-open')) { set(false); btn.focus(); }
+    });
+  }
+
   /* ------------------------------------------------------------ init ---- */
 
   document.addEventListener('DOMContentLoaded', function () {
+    initWorks();
     document.querySelectorAll('[data-carousel]').forEach(buildCarousel);
     document.querySelectorAll('[data-grid]').forEach(function (g) {
       if (g.dataset.grid === 'dno') buildDnoGrid(g);

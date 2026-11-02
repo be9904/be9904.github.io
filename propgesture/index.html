@@ -32,6 +32,44 @@
 
 <body>
 
+  <!-- ===================== RELATED PUBLICATIONS ===================== -->
+  <!-- Fixed to the top-right corner (bottom-right on phones). js/index.js
+       toggles .is-open on the container. Add a .pg-works-group for each new
+       category. -->
+  <div class="pg-works" id="pg-works">
+    <button class="pg-works-btn" type="button" aria-expanded="false" aria-controls="pg-works-menu">
+      <svg class="pg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z" />
+        <path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z" />
+      </svg><span>Related Publications</span>
+      <svg class="pg-icon pg-works-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
+    </button>
+    <div class="pg-works-menu" id="pg-works-menu" role="region" aria-label="Related publications">
+      <div class="pg-works-group">
+        <p class="pg-works-heading">Gesture Retargeting</p>
+        <a class="pg-work" href="https://jhkang0408.github.io/RRDMVAART/" target="_blank" rel="noopener">
+          <span class="pg-work-title">Real-time Retargeting of Deictic Motion to Virtual Avatars for Augmented Reality
+            Telepresence</span>
+          <span class="pg-work-venue">IEEE ISMAR, 2023</span>
+        </a>
+        <a class="pg-work" href="https://jhkang0408.github.io/RTUGVADTE/" target="_blank" rel="noopener">
+          <span class="pg-work-title">Real-time Translation of Upper-body Gestures to Virtual Avatars in Dissimilar
+            Telepresence Environments</span>
+          <span class="pg-work-venue">IEEE TVCG, 2025</span>
+        </a>
+        <a class="pg-work" href="https://jhkang0408.github.io/PTUGRTEVADE/" target="_blank" rel="noopener">
+          <span class="pg-work-title">Part-wise Translation of Upper-body Gestures via Real-time Target Estimation for
+            Virtual Avatars in Dissimilar Environments</span>
+          <span class="pg-work-venue">IEEE TVCG, 2026</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
   <!-- ============================= HERO ============================= -->
   <section class="section pg-hero" id="top">
     <div class="container is-max-widescreen has-text-centered">
